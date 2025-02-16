@@ -1,0 +1,88 @@
+# Ignore IDE-specific files
+**/.idea/
+**/*.iml
+**/*.ipr
+**/*.iws
+**/.vscode/
+**/*.swp
+**/*.sw
+
+# Ignore build and dependency directories
+**/target/
+**/build/
+**/out/
+**/bin/
+**/.gradle/
+**/.mvn/
+**/mvnw
+**/mvnw.cmd
+**/gradlew
+**/gradlew.bat
+
+# Ignore logs and local configuration
+**/logs/
+**/*.log
+**/*.log.*
+**/*.pid
+**/*.seed
+**/*.env
+**/*.env.local
+**/*.env.development
+**/*.env.test
+**/*.env.production
+
+# Ignore dependency caches
+**/node_modules/
+**/jspm_packages/
+**/bower_components/
+**/.vendor/
+**/vendor/
+**/dist/
+**/lib-cov/
+**/coverage/
+
+# Ignore OS-specific files
+**/.DS_Store
+**/Thumbs.db
+**/*.sublime-workspace
+**/*.sublime-project
+
+# Ignore compiled files
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+**/*.nar
+**/*.zip
+**/*.tar.gz
+**/*.rar
+
+# Ignore test reports and coverage
+**/test-output/
+**/reports/
+**/coverage/
+**/.nyc_output/
+
+# Ignore Spring Boot specific files
+**/application.properties
+**/application.yml
+**/application-*.yml
+**/application-*.properties
+
+# Ignore Docker files
+**/docker-compose.yml
+**/docker-compose.*.yml
+**/Dockerfile
+**/.dockerignore
+
+# Ignore other files
+**/*.bak
+**/*.tmp
+**/*.orig
+**/*.rej
+**/*.swo
+**/*.swp
+**/*.zip
+**/*.tar.gz
+**/*.rar
+**/*.7z

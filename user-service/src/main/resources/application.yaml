@@ -1,0 +1,23 @@
+server:
+    port: 8082
+
+spring:
+    application:
+        name: user-service
+
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: workerp_users
+            username: root # Match Docker MONGO_INITDB_ROOT_USERNAME
+            password: rootpassword # Match Docker MONGO_INITDB_ROOT_PASSWORD
+            authentication-database: admin # MongoDB uses 'admin' db for authentication
+
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: guest
+        password: guest
+        queue:
+            user-registration: user.registration.queue
