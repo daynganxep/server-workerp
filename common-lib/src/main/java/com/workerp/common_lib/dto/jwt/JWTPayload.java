@@ -10,15 +10,13 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class JWTPayloadDto {
+public class JWTPayload {
     String id;
-    String email;
     String scope;
 
     @JsonCreator
-    public JWTPayloadDto(@JsonProperty("id") String id, @JsonProperty("email") String email, @JsonProperty("scope") String scope) {
+    public JWTPayload(@JsonProperty("id") String id, @JsonProperty("scope") String scope) {
         this.id = id;
-        this.email = email;
         this.scope = scope;
     }
 }

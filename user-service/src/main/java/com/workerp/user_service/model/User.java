@@ -15,10 +15,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
     @Id
     private String id;
-    private String username;
     private String email;
+    private String password;
     private String fullName;
-    private String phoneNumber;
-    private String address;
-    private boolean active;
+    private String avatar;
+    private Boolean local;
+    private String provider;
+    private String providerId;
+    private Boolean active;
 }

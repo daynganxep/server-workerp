@@ -58,9 +58,19 @@ app:
   admin:
     email: ${ADMIN_EMAIL}
     password: ${ADMIN_PASSWORD}
-  clientReceiveTokensPath: ${CLIENT_RECEIVE_TOKENS_PATH}
+  clientReceiveRefreshTokenPath: ${CLIENT_RECEIVE_REFRESH_TOKEN_PATH}
   api-get-way-url: ${API_GET_WAY_URL}
 
 
 server:
   port: ${PORT}
+
+feign:
+  api-gateway:
+    url: http://localhost:8080
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
