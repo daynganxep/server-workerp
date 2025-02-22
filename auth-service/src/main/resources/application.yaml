@@ -59,7 +59,6 @@ app:
     email: ${ADMIN_EMAIL}
     password: ${ADMIN_PASSWORD}
   clientReceiveRefreshTokenPath: ${CLIENT_RECEIVE_REFRESH_TOKEN_PATH}
-  api-get-way-url: ${API_GET_WAY_URL}
 
 
 server:

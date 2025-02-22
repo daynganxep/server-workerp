@@ -19,7 +19,7 @@ public class RefreshTokenUtil extends BaseJWTUtil {
     @Value("${app.jwt.refresh.secret}")
     private String refreshSecret;
 
-    @Value("${app.jwt.refresh.expiration}")
+    @Value("${app.jwt.refresh.expiration:1314000000}")
     private long refreshExpiration;
 
     @Override
@@ -39,7 +39,7 @@ public class RefreshTokenUtil extends BaseJWTUtil {
     public String generateToken(JWTPayload payload) {
         String token = super.generateToken(payload);
         String key = getRedisKey(payload.getId());
-        redisService.saveWithTTL(key, token, 100, TimeUnit.DAYS);
+        redisService.saveWithTTL(key, token, this.getExpiration(), TimeUnit.MILLISECONDS);
         return token;
     }
 

@@ -1,6 +1,5 @@
 package com.workerp.auth_service.controller;
 
-import com.nimbusds.openid.connect.sdk.UserInfoErrorResponse;
 import com.workerp.auth_service.dto.request.AuthLoginRequest;
 import com.workerp.auth_service.dto.request.AuthRefreshTokenRequest;
 import com.workerp.auth_service.dto.request.AuthRegisterRequest;
@@ -9,7 +8,6 @@ import com.workerp.auth_service.dto.response.AuthRefreshTokenResponse;
 import com.workerp.auth_service.service.AuthService;
 import com.workerp.common_lib.dto.api.ApiResponse;
 import com.workerp.common_lib.dto.user_service.UserInfoResponse;
-import com.workerp.common_lib.util.SecurityUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;

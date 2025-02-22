@@ -1,9 +1,9 @@
 package com.workerp.common_lib.config;
 
+import com.workerp.common_lib.security.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,38 +23,34 @@ import java.util.Arrays;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class BaseSecurityConfig {
-    private final JwtDecoder jwtDecoder;
-    private final JwtAuthenticationConverter jwtAuthenticationConverter;
+    public final JwtDecoder jwtDecoder;
+    public final JwtAuthenticationConverter jwtAuthenticationConverter;
+    public final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
-    protected String[] GET_PUBLIC_ROUTES = {};
-    protected String[] POST_PUBLIC_ROUTES = {};
-    protected String[] PUT_PUBLIC_ROUTES = {};
-    protected String[] PATCH_PUBLIC_ROUTES = {};
-    protected String[] DELETE_PUBLIC_ROUTES = {};
-    protected String[] OPTIONS_PUBLIC_ROUTES = {};
+    public String[] publicRoutes = {};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("publicRoutes: " + Arrays.toString(publicRoutes));
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                )
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, GET_PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(HttpMethod.POST, POST_PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(HttpMethod.PUT, PUT_PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(HttpMethod.PATCH, PATCH_PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, DELETE_PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, OPTIONS_PUBLIC_ROUTES).permitAll()
+                        .requestMatchers(publicRoutes).permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
                                 .decoder(jwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter)
                         )
+                        .authenticationEntryPoint(authenticationEntryPoint)
                 )
                 .headers(headers -> headers
                         .contentTypeOptions(contentType -> contentType.disable())

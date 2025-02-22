@@ -1,6 +1,7 @@
 package com.workerp.user_service.config;
 
 import com.workerp.common_lib.config.BaseSecurityConfig;
+import com.workerp.common_lib.security.CustomAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,10 +11,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 
 @Configuration
 public class SecurityConfig extends BaseSecurityConfig {
-    public SecurityConfig(JwtDecoder jwtDecoder, JwtAuthenticationConverter jwtAuthenticationConverter) {
-        super(jwtDecoder, jwtAuthenticationConverter);
-        this.GET_PUBLIC_ROUTES = new String[]{"api/users/**"};
-        this.POST_PUBLIC_ROUTES = new String[]{"api/users/**"};
+    public SecurityConfig(JwtDecoder jwtDecoder, JwtAuthenticationConverter jwtAuthenticationConverter, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
+        super(jwtDecoder, jwtAuthenticationConverter,customAuthenticationEntryPoint);
+        this.publicRoutes = new String[]{"api/users/**"};
     }
 
     @Bean

@@ -1,6 +1,7 @@
 package com.workerp.util_service.config;
 
 import com.workerp.common_lib.config.BaseSecurityConfig;
+import com.workerp.common_lib.security.CustomAuthenticationEntryPoint;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,10 +12,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig extends BaseSecurityConfig {
-    public SecurityConfig(JwtDecoder jwtDecoder, JwtAuthenticationConverter jwtAuthenticationConverter) {
-        super(jwtDecoder, jwtAuthenticationConverter);
-        this.GET_PUBLIC_ROUTES = new String[]{"/api/utils/**"};
-        this.POST_PUBLIC_ROUTES = new String[]{"/api/utils/**"};
-        this.DELETE_PUBLIC_ROUTES = new String[]{"/api/utils/**"};
+    public SecurityConfig(JwtDecoder jwtDecoder, JwtAuthenticationConverter jwtAuthenticationConverter, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
+        super(jwtDecoder, jwtAuthenticationConverter, customAuthenticationEntryPoint);
+        this.publicRoutes = new String[]{"/api/utils/**"};
     }
 }
