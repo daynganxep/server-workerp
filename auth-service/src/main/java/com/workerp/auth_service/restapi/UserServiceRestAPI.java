@@ -2,10 +2,7 @@ package com.workerp.auth_service.restapi;
 
 import com.workerp.common_lib.annotation.ApiGatewayClient;
 import com.workerp.common_lib.dto.api.ApiResponse;
-import com.workerp.common_lib.dto.user_service.CreateUserRequest;
-import com.workerp.common_lib.dto.user_service.CreateUserResponse;
-import com.workerp.common_lib.dto.user_service.UserLoginRequest;
-import com.workerp.common_lib.dto.user_service.UserLoginResponse;
+import com.workerp.common_lib.dto.user_service.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,4 +18,7 @@ public interface UserServiceRestAPI {
 
     @PostMapping("/api/users/login")
     ApiResponse<UserLoginResponse> login(@RequestBody UserLoginRequest request);
+
+    @GetMapping("/api/users/info")
+    ApiResponse<UserInfoResponse> getInfo();
 }

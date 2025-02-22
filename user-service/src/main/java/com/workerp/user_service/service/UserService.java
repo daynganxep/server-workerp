@@ -1,10 +1,8 @@
 package com.workerp.user_service.service;
 
-import com.workerp.common_lib.dto.user_service.CreateUserRequest;
-import com.workerp.common_lib.dto.user_service.CreateUserResponse;
-import com.workerp.common_lib.dto.user_service.UserLoginRequest;
-import com.workerp.common_lib.dto.user_service.UserLoginResponse;
+import com.workerp.common_lib.dto.user_service.*;
 import com.workerp.common_lib.exception.AppException;
+import com.workerp.common_lib.util.SecurityUtil;
 import com.workerp.user_service.mapper.UserMapper;
 import com.workerp.user_service.model.User;
 import com.workerp.user_service.repository.UserRepository;
@@ -53,5 +51,11 @@ public class UserService {
             throw new AppException(HttpStatus.BAD_REQUEST, "Wrong password", "user-f-03");
         }
         return UserLoginResponse.builder().id(user.getId()).build();
+    }
+
+    public UserInfoResponse getInfo() {
+        String userId = SecurityUtil.getUserId();
+        User user =  userRepository.findById(userId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found", "user-f-04"));
+        return userMapper.userToUserInfoResponse(user);
     }
 }

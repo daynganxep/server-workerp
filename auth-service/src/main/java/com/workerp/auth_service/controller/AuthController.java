@@ -1,5 +1,6 @@
 package com.workerp.auth_service.controller;
 
+import com.nimbusds.openid.connect.sdk.UserInfoErrorResponse;
 import com.workerp.auth_service.dto.request.AuthLoginRequest;
 import com.workerp.auth_service.dto.request.AuthRefreshTokenRequest;
 import com.workerp.auth_service.dto.request.AuthRegisterRequest;
@@ -7,12 +8,16 @@ import com.workerp.auth_service.dto.response.AuthLoginResponse;
 import com.workerp.auth_service.dto.response.AuthRefreshTokenResponse;
 import com.workerp.auth_service.service.AuthService;
 import com.workerp.common_lib.dto.api.ApiResponse;
+import com.workerp.common_lib.dto.user_service.UserInfoResponse;
+import com.workerp.common_lib.util.SecurityUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -49,6 +54,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthLoginResponse>> login(@RequestBody @Valid AuthLoginRequest request) {
         ApiResponse<AuthLoginResponse> apiResponse = ApiResponse.<AuthLoginResponse>builder()
                 .code("auth-s-03")
+                .success(true)
                 .message("Login successfully")
                 .data( authService.login(request))
                 .build();
@@ -59,6 +65,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthRefreshTokenResponse>> refreshToken(@RequestBody @Valid AuthRefreshTokenRequest request) {
         ApiResponse<AuthRefreshTokenResponse> apiResponse = ApiResponse.<AuthRefreshTokenResponse>builder()
                 .code("auth-s-04")
+                .success(true)
                 .message("Refresh new access token successfully")
                 .data(authService.refreshToken(request))
                 .build();
@@ -123,16 +130,16 @@ public class AuthController {
 //        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 //    }
 //
-//    @GetMapping("/info")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<ApiResponse<AuthAccountInfoResponse>> getInfo() {
-//        String accountId = securityUtil.getAccountId();
-//        ApiResponse<AuthAccountInfoResponse> apiResponse = ApiResponse.<AuthAccountInfoResponse>builder()
-//                .data(authService.getAccountInfo(accountId))
-//                .code("auth-s-10")
-//                .message("Get user info successfully")
-//                .build();
-//        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-//    }
+    @GetMapping("/info")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<UserInfoResponse>> getInfo() {
+        ApiResponse<UserInfoResponse> apiResponse = ApiResponse.<UserInfoResponse>builder()
+                .code("auth-s-10")
+                .success(true)
+                .message("Get user info successfully")
+                .data(authService.getInfo())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }
 

@@ -1,8 +1,11 @@
 spring:
   config:
     import: "optional:file:.env[.properties]"
-  application:
-    name: workerp_common_lib
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
   data:
     redis:
       host: ${REDIS_HOST}
@@ -12,3 +15,4 @@ app:
   jwt:
     access:
       secret: ${JWT_ACCESS_SECRET}
+  api-get-way-url: ${API_GET_WAY_URL}

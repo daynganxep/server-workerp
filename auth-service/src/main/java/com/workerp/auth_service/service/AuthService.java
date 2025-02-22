@@ -13,10 +13,7 @@ import com.workerp.auth_service.util.jwt.RefreshTokenUtil;
 import com.workerp.common_lib.dto.api.ApiResponse;
 import com.workerp.common_lib.dto.jwt.JWTPayload;
 import com.workerp.common_lib.dto.message.EmailMessage;
-import com.workerp.common_lib.dto.user_service.CreateUserRequest;
-import com.workerp.common_lib.dto.user_service.CreateUserResponse;
-import com.workerp.common_lib.dto.user_service.UserLoginRequest;
-import com.workerp.common_lib.dto.user_service.UserLoginResponse;
+import com.workerp.common_lib.dto.user_service.*;
 import com.workerp.common_lib.exception.AppException;
 import com.workerp.common_lib.service.BaseRedisService;
 import com.workerp.common_lib.util.CodeGenerator;
@@ -106,5 +103,9 @@ public class AuthService {
         return AuthLoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken).build();
+    }
+
+    public UserInfoResponse getInfo() {
+        return userServiceClient.getInfo().getData();
     }
 }

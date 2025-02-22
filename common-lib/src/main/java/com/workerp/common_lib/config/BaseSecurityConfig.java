@@ -1,6 +1,6 @@
 package com.workerp.common_lib.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,7 +21,10 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class BaseSecurityConfig {
+    private final JwtDecoder jwtDecoder;
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
 
     protected String[] GET_PUBLIC_ROUTES = {};
     protected String[] POST_PUBLIC_ROUTES = {};
@@ -29,13 +32,6 @@ public class BaseSecurityConfig {
     protected String[] PATCH_PUBLIC_ROUTES = {};
     protected String[] DELETE_PUBLIC_ROUTES = {};
     protected String[] OPTIONS_PUBLIC_ROUTES = {};
-
-
-//    @Autowired
-//    public JwtDecoder jwtDecoder;
-//
-//    @Autowired
-//    public JwtAuthenticationConverter jwtAuthenticationConverter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -54,18 +50,12 @@ public class BaseSecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, DELETE_PUBLIC_ROUTES).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, OPTIONS_PUBLIC_ROUTES).permitAll()
                         .anyRequest().authenticated())
-//                .oauth2Login(oauth2 -> oauth2
-//                        .userInfoEndpoint(userInfo -> userInfo
-//                                .userService(oAuth2UserService)
-//                        )
-//                        .defaultSuccessUrl("/auth/login/oauth2/success", true)
-//                )
-//                .oauth2ResourceServer(oauth2 -> oauth2
-//                        .jwt(jwtConfigurer -> jwtConfigurer
-//                                .decoder(jwtDecoder)
-//                                .jwtAuthenticationConverter(jwtAuthenticationConverter)
-//                        )
-//                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwtConfigurer -> jwtConfigurer
+                                .decoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter)
+                        )
+                )
                 .headers(headers -> headers
                         .contentTypeOptions(contentType -> contentType.disable())
                         .frameOptions(frame -> frame.disable()))
@@ -81,7 +71,6 @@ public class BaseSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(false);
         configuration.setMaxAge(3600L);
 

@@ -39,5 +39,9 @@ app:
     folder: ${CLOUDINARY_FOLDER}
   codeUtil:
     timeToLive: 5
+  jwt:
+    access:
+      secret: ${JWT_ACCESS_SECRET}
 server:
   port: ${PORT}
+

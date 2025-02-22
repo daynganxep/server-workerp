@@ -1,5 +1,6 @@
-package com.workerp.auth_service.config;
+package com.workerp.common_lib.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,13 +13,16 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
-public class JWTConfig {
+@RequiredArgsConstructor
+public class BaseJWTConfig {
     @Value("${app.jwt.access.secret}")
-    private String JWT_SECRET;
+    private String accessSecret;
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(JWT_SECRET.getBytes(),"HS512");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(
+                accessSecret.getBytes(), "HmacSHA512"
+        );
         return NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)
                 .macAlgorithm(MacAlgorithm.HS512)
@@ -26,7 +30,7 @@ public class JWTConfig {
     }
 
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter(){
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("scope");
@@ -36,4 +40,3 @@ public class JWTConfig {
         return jwtAuthenticationConverter;
     }
 }
-

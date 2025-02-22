@@ -2,6 +2,8 @@ server:
   port: ${PORT:8082}
 
 spring:
+  config:
+    import: "optional:file:.env[.properties]"
   application:
     name: user-service
   data:
@@ -9,7 +11,7 @@ spring:
       host: ${MONGODB_HOST:localhost}
       port: ${MONGODB_PORT:27017}
       database: ${MONGODB_DATABASE:workerp_users}
-      username: ${MONGODB_PASSWORD:root}
+      username: ${MONGODB_USERNAME:root}
       password: ${MONGODB_PASSWORD:rootpassword}
       authentication-database: admin # MongoDB uses 'admin' db for authentication
 
@@ -18,3 +20,7 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
+app:
+  jwt:
+    access:
+      secret: ${JWT_ACCESS_SECRET}
