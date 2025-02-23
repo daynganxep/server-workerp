@@ -1,5 +1,6 @@
 package com.workerp.auth_service.controller;
 
+import com.workerp.auth_service.dto.request.AuthLogOutRequest;
 import com.workerp.auth_service.dto.request.AuthLoginRequest;
 import com.workerp.auth_service.dto.request.AuthRefreshTokenRequest;
 import com.workerp.auth_service.dto.request.AuthRegisterRequest;
@@ -68,16 +69,16 @@ public class AuthController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-//
-//    @PostMapping("/logout")
-//    public ResponseEntity<ApiResponse<Void>> logOut(@RequestBody @Valid AuthLogOutRequest request) {
-//        authService.logOut(request);
-//        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-//                .code("auth-s-05")
-//                .message("Log out successfully")
-//                .build();
-//        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-//    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logOut(@RequestBody @Valid AuthLogOutRequest request) {
+        authService.logOut(request);
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code("auth-s-05")
+                .message("Log out successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 //
 //    @PreAuthorize("isAuthenticated()")
 //    @PostMapping("/change-password")

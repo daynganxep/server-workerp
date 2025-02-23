@@ -1,6 +1,7 @@
 package com.workerp.auth_service.service;
 
 import com.workerp.auth_service.dto.RegisterData;
+import com.workerp.auth_service.dto.request.AuthLogOutRequest;
 import com.workerp.auth_service.dto.request.AuthLoginRequest;
 import com.workerp.auth_service.dto.request.AuthRefreshTokenRequest;
 import com.workerp.auth_service.dto.response.AuthLoginResponse;
@@ -10,7 +11,6 @@ import com.workerp.auth_service.restapi.UserServiceRestAPI;
 import com.workerp.auth_service.dto.request.AuthRegisterRequest;
 import com.workerp.auth_service.util.jwt.AccessTokenUtil;
 import com.workerp.auth_service.util.jwt.RefreshTokenUtil;
-import com.workerp.common_lib.dto.api.ApiResponse;
 import com.workerp.common_lib.dto.jwt.JWTPayload;
 import com.workerp.common_lib.dto.message.EmailMessage;
 import com.workerp.common_lib.dto.user_service.*;
@@ -107,5 +107,11 @@ public class AuthService {
 
     public UserInfoResponse getInfo() {
         return userServiceClient.getInfo().getData();
+    }
+
+    public void logOut(AuthLogOutRequest request) {
+        String refreshToken = request.getRefreshToken();
+        JWTPayload payload = refreshTokenUtil.verifyToken(refreshToken);
+        refreshTokenUtil.deleteToken(payload.getId());
     }
 }

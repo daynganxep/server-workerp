@@ -1,8 +1,8 @@
 package com.workerp.auth_service.util.jwt;
 
-import com.workerp.auth_service.service.RedisService;
 import com.workerp.common_lib.dto.jwt.JWTPayload;
 import com.workerp.common_lib.exception.AppException;
+import com.workerp.common_lib.service.BaseRedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class RefreshTokenUtil extends BaseJWTUtil {
-    private final RedisService redisService;
+    private final BaseRedisService redisService;
 
     @Value("${app.jwt.refresh.secret}")
     private String refreshSecret;
@@ -47,10 +47,22 @@ public class RefreshTokenUtil extends BaseJWTUtil {
     public JWTPayload verifyToken(String token) {
         JWTPayload payload = super.verifyToken(token);
         String key = getRedisKey(payload.getId());
-        String storedRefreshToken = (String) redisService.getValue(key);
-        if (storedRefreshToken.isEmpty() || !token.equals(storedRefreshToken)) {
+        Object storedRefreshToken = redisService.getValue(key);
+
+        if (storedRefreshToken == null) {
             throw new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "auth-e-01");
         }
+
+        if (!token.equals(storedRefreshToken.toString())) {
+            throw new AppException(HttpStatus.NOT_FOUND, "Refresh token mismatch", "auth-e-02");
+        }
+
         return payload;
+    }
+
+
+    public void deleteToken(String userId) {
+        String key = getRedisKey(userId);
+        redisService.delete(key);
     }
 }
