@@ -24,4 +24,7 @@ public interface UserServiceRestAPI {
 
     @PostMapping("/api/users/change-password")
     ApiResponse<Void> changePassword(@RequestBody UserChangePasswordRequest request);
+
+    @PostMapping("/api/users/oauth2-login")
+    ApiResponse<UserOAuth2LoginResponse> oAuth2Login(UserOAuth2LoginRequest request);
 }

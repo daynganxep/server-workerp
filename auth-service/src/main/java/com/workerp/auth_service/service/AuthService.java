@@ -18,6 +18,7 @@ import com.workerp.common_lib.util.CodeGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -114,7 +115,58 @@ public class AuthService {
         refreshTokenUtil.deleteToken(payload.getId());
     }
 
-    public void changePassword(AuthChangePasswordRequest request){
+    public void changePassword(AuthChangePasswordRequest request) {
         userServiceClient.changePassword(authMapper.toUserChangePasswordRequest(request));
     }
+
+    public String loginOAuth2Success(OAuth2User oAuth2User) {
+        if (oAuth2User == null) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Invalid OAuth2 user", "auth-f-07-01");
+        }
+
+        String accountOAuthId;
+        String providerName = oAuth2User.getAttribute("provider"); // Có thể null với GitHub
+        String email;
+        String avatar;
+        String name;
+
+        switch (providerName) {
+            case "google" -> {
+                accountOAuthId = oAuth2User.getAttribute("sub");
+                email = oAuth2User.getAttribute("email");
+                avatar = oAuth2User.getAttribute("picture");
+                name = oAuth2User.getAttribute("name");
+            }
+            case "github" -> {
+                accountOAuthId = String.valueOf(oAuth2User.<String>getAttribute("id"));
+                email = oAuth2User.getAttribute("email");
+                avatar = oAuth2User.getAttribute("avatar_url");
+                name = oAuth2User.getAttribute("name");
+            }
+            default -> throw new AppException(HttpStatus.BAD_REQUEST, "Unsupported OAuth2 provider", "auth-f-07-02");
+        }
+
+        if (email == null || email.isBlank()) {
+            email = providerName + "-" + accountOAuthId + "@noemail.com";
+        }
+
+        UserOAuth2LoginRequest userOAuth2Login = UserOAuth2LoginRequest.builder()
+                .email(email)
+                .fullName(name != null ? name : "User")
+                .active(true)
+                .avatar(avatar)
+                .providerId(accountOAuthId)
+                .provider(providerName)
+                .local(false)
+                .build();
+
+        UserOAuth2LoginResponse userOAuth2LoginResponse = userServiceClient.oAuth2Login(userOAuth2Login).getData();
+        JWTPayload payload = JWTPayload.builder()
+                .id(userOAuth2LoginResponse.getId())
+                .scope("USER")
+                .build();
+
+        return refreshTokenUtil.generateToken(payload);
+    }
+
 }

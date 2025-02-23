@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -69,5 +71,18 @@ public class UserService {
         }
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
+    }
+
+    public UserOAuth2LoginResponse oauth2Login(UserOAuth2LoginRequest request){
+        String providerName = request.getProvider();
+        String providerId = request.getProviderId();
+        Optional<User> userOptional = userRepository.findByProviderAndProviderId(providerName, providerId);
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            return userMapper.toUserOAuth2LoginResponse(user);
+        }
+        User user = userMapper.toUser(request);
+        userRepository.save(user);
+        return userMapper.toUserOAuth2LoginResponse(user);
     }
 }

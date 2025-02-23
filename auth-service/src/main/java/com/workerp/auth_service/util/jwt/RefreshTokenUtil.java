@@ -50,11 +50,11 @@ public class RefreshTokenUtil extends BaseJWTUtil {
         Object storedRefreshToken = redisService.getValue(key);
 
         if (storedRefreshToken == null) {
-            throw new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "auth-e-01");
+            throw new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "jwt-f-01-01");
         }
 
         if (!token.equals(storedRefreshToken.toString())) {
-            throw new AppException(HttpStatus.NOT_FOUND, "Refresh token mismatch", "auth-e-02");
+            throw new AppException(HttpStatus.NOT_FOUND, "Refresh token mismatch", "auth-f-01-02");
         }
 
         return payload;

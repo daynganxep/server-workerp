@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -88,16 +90,14 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    //    @GetMapping("/login/oauth2/success")
-//    public RedirectView loginOAuth2Success(@AuthenticationPrincipal OAuth2User oAuth2User) {
-//        AuthResponse authResponse = authService.loginOAuth2Success(oAuth2User);
-//        String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveTokensPath)
-//                .queryParam("accessToken", authResponse.getAccessToken())
-//                .queryParam("refreshToken", authResponse.getRefreshToken())
-//                .toUriString();
-//        return new RedirectView(redirectUrl);
-//    }
-//
+    @GetMapping("/login/oauth2/success")
+    public RedirectView loginOAuth2Success(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        System.out.println("OAuth2User received in loginOAuth2Success: " + oAuth2User.getAttributes());
+        String refreshToken = authService.loginOAuth2Success(oAuth2User);
+        String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveRefreshTokenPath).queryParam("refreshToken", refreshToken).toUriString();
+        return new RedirectView(redirectUrl);
+    }
+
 //    @PostMapping("/forgot-password")
 //    public ResponseEntity<ApiResponse<Void>> forGotPassword(@RequestBody AuthForgotPasswordRequest request) {
 //        authService.forgotPassword(request);

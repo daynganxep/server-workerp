@@ -1,8 +1,6 @@
 package com.workerp.user_service.mapper;
 
-import com.workerp.common_lib.dto.user_service.CreateUserRequest;
-import com.workerp.common_lib.dto.user_service.CreateUserResponse;
-import com.workerp.common_lib.dto.user_service.UserInfoResponse;
+import com.workerp.common_lib.dto.user_service.*;
 import com.workerp.user_service.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,4 +14,8 @@ public interface UserMapper {
     CreateUserResponse userToCreateUserResponse(User user);
 
     UserInfoResponse userToUserInfoResponse(User user);
+
+    User toUser(UserOAuth2LoginRequest userOAuth2LoginRequest);
+
+    UserOAuth2LoginResponse toUserOAuth2LoginResponse(User user);
 }

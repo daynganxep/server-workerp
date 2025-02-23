@@ -4,6 +4,7 @@ import com.workerp.common_lib.dto.api.ApiResponse;
 import com.workerp.common_lib.dto.user_service.*;
 import com.workerp.user_service.service.UserService;
 import jakarta.annotation.security.PermitAll;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +74,18 @@ public class UserController {
                 .code("user-s-05")
                 .success(true)
                 .message("Change password successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PostMapping("/oauth2-login")
+    @PermitAll
+    public ResponseEntity<ApiResponse<UserOAuth2LoginResponse>> oauth2Login(@RequestBody @Valid UserOAuth2LoginRequest request) {
+        ApiResponse<UserOAuth2LoginResponse> apiResponse = ApiResponse.<UserOAuth2LoginResponse>builder()
+                .code("user-s-06")
+                .success(true)
+                .message("Oauth2 login successfully")
+                .data(userService.oauth2Login(request))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
