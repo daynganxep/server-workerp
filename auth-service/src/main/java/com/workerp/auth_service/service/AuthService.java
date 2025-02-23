@@ -1,14 +1,12 @@
 package com.workerp.auth_service.service;
 
 import com.workerp.auth_service.dto.RegisterData;
-import com.workerp.auth_service.dto.request.AuthLogOutRequest;
-import com.workerp.auth_service.dto.request.AuthLoginRequest;
-import com.workerp.auth_service.dto.request.AuthRefreshTokenRequest;
+import com.workerp.auth_service.dto.request.*;
 import com.workerp.auth_service.dto.response.AuthLoginResponse;
 import com.workerp.auth_service.dto.response.AuthRefreshTokenResponse;
+import com.workerp.auth_service.mapper.AuthMapper;
 import com.workerp.auth_service.message.producer.EmailMessageProducer;
 import com.workerp.auth_service.restapi.UserServiceRestAPI;
-import com.workerp.auth_service.dto.request.AuthRegisterRequest;
 import com.workerp.auth_service.util.jwt.AccessTokenUtil;
 import com.workerp.auth_service.util.jwt.RefreshTokenUtil;
 import com.workerp.common_lib.dto.jwt.JWTPayload;
@@ -34,6 +32,7 @@ public class AuthService {
     private final BaseRedisService redisService;
     private final RefreshTokenUtil refreshTokenUtil;
     private final AccessTokenUtil accessTokenUtil;
+    private final AuthMapper authMapper;
 
     private String redisRegisterKey(String code) {
         return "auth:register:" + code;
@@ -42,7 +41,7 @@ public class AuthService {
     public void requestRegister(AuthRegisterRequest request) {
         Boolean checkEmailExistedResponse = userServiceClient.checkExistedEmail(request.getEmail()).getData();
         if (checkEmailExistedResponse) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Email exited", "auth-f-01");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Email exited", "auth-f-01-01");
         }
         String code = CodeGenerator.generateSixDigitCode();
 
@@ -62,7 +61,7 @@ public class AuthService {
         String key = redisRegisterKey(code);
         RegisterData registerData = (RegisterData) redisService.getValue(key);
 
-        if (registerData == null) throw new AppException(HttpStatus.BAD_REQUEST, "Invalid code", "auth-f-02");
+        if (registerData == null) throw new AppException(HttpStatus.BAD_REQUEST, "Invalid code", "auth-f-02-01");
 
         CreateUserRequest createUserRequest = CreateUserRequest
                 .builder()
@@ -113,5 +112,9 @@ public class AuthService {
         String refreshToken = request.getRefreshToken();
         JWTPayload payload = refreshTokenUtil.verifyToken(refreshToken);
         refreshTokenUtil.deleteToken(payload.getId());
+    }
+
+    public void changePassword(AuthChangePasswordRequest request){
+        userServiceClient.changePassword(authMapper.toUserChangePasswordRequest(request));
     }
 }

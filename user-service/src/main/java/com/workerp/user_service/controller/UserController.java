@@ -64,4 +64,16 @@ public class UserController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @PostMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<Void>> changePassword(@RequestBody UserChangePasswordRequest request) {
+        userService.changePassword(request);
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code("user-s-05")
+                .success(true)
+                .message("Change password successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

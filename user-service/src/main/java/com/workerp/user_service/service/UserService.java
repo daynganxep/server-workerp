@@ -24,7 +24,7 @@ public class UserService {
 
     public CreateUserResponse createUser(CreateUserRequest request) {
         if (getUserByEmail(request.getEmail())) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Email already exists", "user-f-01");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Email already exists", "user-f-02-01");
         }
 
         User user = userMapper.createUserRequestToUser(request);
@@ -43,19 +43,31 @@ public class UserService {
 
         User user = userRepository
                 .findByEmailAndLocalTrue(email)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Email not found", "user-f-02"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Email not found", "user-f-03-01"));
         String hashedPassword = user.getPassword();
 
         String password = request.getPassword();
         if (!passwordEncoder.matches(password, hashedPassword)) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Wrong password", "user-f-03");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Wrong password", "user-f-03-02");
         }
         return UserLoginResponse.builder().id(user.getId()).build();
     }
 
     public UserInfoResponse getInfo() {
         String userId = SecurityUtil.getUserId();
-        User user =  userRepository.findById(userId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found", "user-f-04"));
+        User user =  userRepository.findById(userId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found", "user-f-04-01"));
         return userMapper.userToUserInfoResponse(user);
+    }
+
+    public void changePassword(UserChangePasswordRequest request) {
+        String userId = SecurityUtil.getUserId();
+        User user = userRepository.findByIdAndLocalTrue(userId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found", "user-f-05-01"));
+        String hashedPassword = user.getPassword();
+        String oldPassword = request.getOldPassword();
+        if (!passwordEncoder.matches(oldPassword, hashedPassword)) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Wrong old password", "user-f-05-02");
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

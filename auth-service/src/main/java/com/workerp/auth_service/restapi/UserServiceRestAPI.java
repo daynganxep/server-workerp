@@ -21,4 +21,7 @@ public interface UserServiceRestAPI {
 
     @GetMapping("/api/users/info")
     ApiResponse<UserInfoResponse> getInfo();
+
+    @PostMapping("/api/users/change-password")
+    ApiResponse<Void> changePassword(@RequestBody UserChangePasswordRequest request);
 }

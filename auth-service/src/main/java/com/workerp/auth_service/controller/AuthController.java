@@ -1,9 +1,6 @@
 package com.workerp.auth_service.controller;
 
-import com.workerp.auth_service.dto.request.AuthLogOutRequest;
-import com.workerp.auth_service.dto.request.AuthLoginRequest;
-import com.workerp.auth_service.dto.request.AuthRefreshTokenRequest;
-import com.workerp.auth_service.dto.request.AuthRegisterRequest;
+import com.workerp.auth_service.dto.request.*;
 import com.workerp.auth_service.dto.response.AuthLoginResponse;
 import com.workerp.auth_service.dto.response.AuthRefreshTokenResponse;
 import com.workerp.auth_service.service.AuthService;
@@ -54,7 +51,7 @@ public class AuthController {
                 .code("auth-s-03")
                 .success(true)
                 .message("Login successfully")
-                .data( authService.login(request))
+                .data(authService.login(request))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
@@ -79,20 +76,19 @@ public class AuthController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-//
-//    @PreAuthorize("isAuthenticated()")
-//    @PostMapping("/change-password")
-//    public ResponseEntity<ApiResponse<Void>> logOut(@RequestBody @Valid AuthChangePasswordRequest request) {
-//        String userId = BaseJWTUtil.getPayload(SecurityContextHolder.getContext()).getId();
-//        authService.changePassword(userId, request);
-//        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-//                .code("auth-s-06")
-//                .message("Password changed successfully")
-//                .build();
-//        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-//    }
-//
-//    @GetMapping("/login/oauth2/success")
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/change-password")
+    public ResponseEntity<ApiResponse<Void>> changePassword(@RequestBody @Valid AuthChangePasswordRequest request) {
+        authService.changePassword(request);
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code("auth-s-06")
+                .message("Password changed successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    //    @GetMapping("/login/oauth2/success")
 //    public RedirectView loginOAuth2Success(@AuthenticationPrincipal OAuth2User oAuth2User) {
 //        AuthResponse authResponse = authService.loginOAuth2Success(oAuth2User);
 //        String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveTokensPath)
