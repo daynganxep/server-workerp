@@ -1,7 +1,8 @@
 package com.workerp.user_service.controller;
 
 import com.workerp.common_lib.dto.api.ApiResponse;
-import com.workerp.common_lib.dto.user_service.*;
+import com.workerp.common_lib.dto.userservice.request.*;
+import com.workerp.common_lib.dto.userservice.response.*;
 import com.workerp.user_service.service.UserService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
@@ -86,6 +87,18 @@ public class UserController {
                 .success(true)
                 .message("Oauth2 login successfully")
                 .data(userService.oauth2Login(request))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PostMapping("/forgot-password")
+    @PermitAll
+    public ResponseEntity<ApiResponse<UserForgotPasswordResponse>> oauth2Login(@RequestBody @Valid UserForgotPasswordRequest request) {
+        ApiResponse<UserForgotPasswordResponse> apiResponse = ApiResponse.<UserForgotPasswordResponse>builder()
+                .code("user-s-07")
+                .success(true)
+                .message("Forgot password successfully")
+                .data(userService.forgotPassword(request))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

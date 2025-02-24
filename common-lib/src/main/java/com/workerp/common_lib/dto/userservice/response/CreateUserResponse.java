@@ -1,4 +1,4 @@
-package com.workerp.common_lib.dto.user_service;
+package com.workerp.common_lib.dto.userservice.response;
 
 import lombok.Data;
 

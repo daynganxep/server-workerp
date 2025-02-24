@@ -1,6 +1,7 @@
 package com.workerp.user_service.service;
 
-import com.workerp.common_lib.dto.user_service.*;
+import com.workerp.common_lib.dto.userservice.request.*;
+import com.workerp.common_lib.dto.userservice.response.*;
 import com.workerp.common_lib.exception.AppException;
 import com.workerp.common_lib.util.SecurityUtil;
 import com.workerp.user_service.mapper.UserMapper;
@@ -84,5 +85,13 @@ public class UserService {
         User user = userMapper.toUser(request);
         userRepository.save(user);
         return userMapper.toUserOAuth2LoginResponse(user);
+    }
+
+    public UserForgotPasswordResponse forgotPassword(UserForgotPasswordRequest request) {
+        String email = request.getEmail();
+        User user = userRepository.findByEmailAndLocalTrue(email).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Email not found", "user-f-08-01"));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+        return userMapper.toUserForgotPasswordResponse(user);
     }
 }

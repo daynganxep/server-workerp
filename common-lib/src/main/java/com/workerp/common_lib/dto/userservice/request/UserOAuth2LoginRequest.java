@@ -1,4 +1,4 @@
-package com.workerp.common_lib.dto.user_service;
+package com.workerp.common_lib.dto.userservice.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

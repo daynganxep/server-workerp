@@ -2,7 +2,8 @@ package com.workerp.auth_service.restapi;
 
 import com.workerp.common_lib.annotation.ApiGatewayClient;
 import com.workerp.common_lib.dto.api.ApiResponse;
-import com.workerp.common_lib.dto.user_service.*;
+import com.workerp.common_lib.dto.userservice.request.*;
+import com.workerp.common_lib.dto.userservice.response.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,4 +28,7 @@ public interface UserServiceRestAPI {
 
     @PostMapping("/api/users/oauth2-login")
     ApiResponse<UserOAuth2LoginResponse> oAuth2Login(UserOAuth2LoginRequest request);
+
+    @PostMapping("/api/users/forgot-password")
+    ApiResponse<UserForgotPasswordResponse> forgotPassword(@RequestBody UserForgotPasswordRequest request);
 }

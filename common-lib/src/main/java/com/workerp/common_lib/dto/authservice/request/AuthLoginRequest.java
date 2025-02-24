@@ -1,4 +1,4 @@
-package com.workerp.auth_service.dto.request;
+package com.workerp.common_lib.dto.authservice.request;
 
 import lombok.Data;
 

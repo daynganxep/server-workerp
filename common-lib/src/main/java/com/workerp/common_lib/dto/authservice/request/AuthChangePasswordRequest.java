@@ -1,10 +1,10 @@
-package com.workerp.common_lib.dto.user_service;
+package com.workerp.common_lib.dto.authservice.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class UserChangePasswordRequest {
+public class AuthChangePasswordRequest {
     @NotBlank
     private String oldPassword;
     @NotBlank

@@ -1,9 +1,10 @@
 package com.workerp.auth_service.service;
 
-import com.workerp.auth_service.dto.RegisterData;
-import com.workerp.auth_service.dto.request.*;
-import com.workerp.auth_service.dto.response.AuthLoginResponse;
-import com.workerp.auth_service.dto.response.AuthRefreshTokenResponse;
+import com.workerp.common_lib.dto.authservice.request.*;
+import com.workerp.common_lib.dto.authservice.response.AuthForgotPasswordCheckCodeResponse;
+import com.workerp.common_lib.dto.authservice.response.AuthForgotPasswordVerifyResponse;
+import com.workerp.common_lib.dto.authservice.response.AuthLoginResponse;
+import com.workerp.common_lib.dto.authservice.response.AuthRefreshTokenResponse;
 import com.workerp.auth_service.mapper.AuthMapper;
 import com.workerp.auth_service.message.producer.EmailMessageProducer;
 import com.workerp.auth_service.restapi.UserServiceRestAPI;
@@ -11,7 +12,11 @@ import com.workerp.auth_service.util.jwt.AccessTokenUtil;
 import com.workerp.auth_service.util.jwt.RefreshTokenUtil;
 import com.workerp.common_lib.dto.jwt.JWTPayload;
 import com.workerp.common_lib.dto.message.EmailMessage;
-import com.workerp.common_lib.dto.user_service.*;
+import com.workerp.common_lib.dto.userservice.request.CreateUserRequest;
+import com.workerp.common_lib.dto.userservice.request.UserForgotPasswordRequest;
+import com.workerp.common_lib.dto.userservice.request.UserLoginRequest;
+import com.workerp.common_lib.dto.userservice.request.UserOAuth2LoginRequest;
+import com.workerp.common_lib.dto.userservice.response.*;
 import com.workerp.common_lib.exception.AppException;
 import com.workerp.common_lib.service.BaseRedisService;
 import com.workerp.common_lib.util.CodeGenerator;
@@ -37,6 +42,10 @@ public class AuthService {
 
     private String redisRegisterKey(String code) {
         return "auth:register:" + code;
+    }
+
+    private String redisForgotPasswordKey(String code) {
+        return "auth:forgot-password:" + code;
     }
 
     public void requestRegister(AuthRegisterRequest request) {
@@ -169,4 +178,39 @@ public class AuthService {
         return refreshTokenUtil.generateToken(payload);
     }
 
+    public void forgotPassword(AuthForgotPasswordRequest request) {
+        String email = request.getEmail();
+        Boolean checkEmailExistedResponse = userServiceClient.checkExistedEmail(email).getData();
+        if (!checkEmailExistedResponse) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Email does not exist", "auth-f-08-01");
+        }
+        String code = CodeGenerator.generateSixDigitCode();
+        String key = redisForgotPasswordKey(code);
+        redisService.saveWithTTL(key, email, 10, TimeUnit.MINUTES);
+        emailMessageProducer.sendEmailMessage(EmailMessage.builder()
+                .to(email)
+                .type("FORGOT_PASSWORD")
+                .values(Map.of("code", code))
+                .build());
+    }
+
+    public AuthForgotPasswordCheckCodeResponse forgotPasswordCheckCode(AuthForgotPasswordCheckCodeRequest request) {
+        String key = redisForgotPasswordKey(request.getCode());
+        Boolean isCodeValid = redisService.getRedisTemplate().hasKey(key);
+        return AuthForgotPasswordCheckCodeResponse.builder().isCodeValid(isCodeValid).build();
+    }
+
+    public AuthForgotPasswordVerifyResponse verifyForgotPassword(AuthForgotPasswordVerifyRequest request) {
+        String key = redisForgotPasswordKey(request.getCode());
+        String email = (String) redisService.getValue(key);
+        if (email == null) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Invalid code", "auth-f-09-01");
+        }
+        UserForgotPasswordResponse userForgotPasswordResponse = userServiceClient.forgotPassword(UserForgotPasswordRequest.builder().email(email).password(request.getPassword()).build()).getData();
+        redisService.delete(key);
+        JWTPayload payload = JWTPayload.builder().id(userForgotPasswordResponse.getId()).scope("USER").build();
+        String refreshToken = refreshTokenUtil.generateToken(payload);
+        String accessToken = accessTokenUtil.generateToken(payload);
+        return AuthForgotPasswordVerifyResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+    }
 }

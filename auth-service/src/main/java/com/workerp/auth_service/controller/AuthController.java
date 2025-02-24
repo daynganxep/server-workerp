@@ -1,11 +1,13 @@
 package com.workerp.auth_service.controller;
 
-import com.workerp.auth_service.dto.request.*;
-import com.workerp.auth_service.dto.response.AuthLoginResponse;
-import com.workerp.auth_service.dto.response.AuthRefreshTokenResponse;
+import com.workerp.common_lib.dto.authservice.request.*;
+import com.workerp.common_lib.dto.authservice.response.AuthForgotPasswordCheckCodeResponse;
+import com.workerp.common_lib.dto.authservice.response.AuthForgotPasswordVerifyResponse;
+import com.workerp.common_lib.dto.authservice.response.AuthLoginResponse;
+import com.workerp.common_lib.dto.authservice.response.AuthRefreshTokenResponse;
 import com.workerp.auth_service.service.AuthService;
 import com.workerp.common_lib.dto.api.ApiResponse;
-import com.workerp.common_lib.dto.user_service.UserInfoResponse;
+import com.workerp.common_lib.dto.userservice.response.UserInfoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +87,7 @@ public class AuthController {
         authService.changePassword(request);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
                 .code("auth-s-06")
+                .success(true)
                 .message("Password changed successfully")
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
@@ -92,38 +95,43 @@ public class AuthController {
 
     @GetMapping("/login/oauth2/success")
     public RedirectView loginOAuth2Success(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        System.out.println("OAuth2User received in loginOAuth2Success: " + oAuth2User.getAttributes());
         String refreshToken = authService.loginOAuth2Success(oAuth2User);
         String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveRefreshTokenPath).queryParam("refreshToken", refreshToken).toUriString();
         return new RedirectView(redirectUrl);
     }
 
-//    @PostMapping("/forgot-password")
-//    public ResponseEntity<ApiResponse<Void>> forGotPassword(@RequestBody AuthForgotPasswordRequest request) {
-//        authService.forgotPassword(request);
-//        String verificationCode = CommonUtil.generateVerificationCode();
-//        forgotPasswordCodeUtil.save(CommonUtil.getForgotPasswordKey(verificationCode), request.getEmail(), 1);
-//        String pathEmailTemplateVerifyForgotPasswordCode = "src/main/resources/HTMLTemplates/email_template_verify_forgot_password_code.html";
-//        emailService.sendEmailToVerifyForgotPassword(request.getEmail(), verificationCode, pathEmailTemplateVerifyForgotPasswordCode);
-//        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-//                .code("auth-s-08")
-//                .message("Request to get new password successfully, please check your email")
-//                .build();
-//        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-//    }
-//
-//    @PostMapping("/forgot-password/verify")
-//    public ResponseEntity<ApiResponse<AuthResponse>> verifyForgotPassword(@RequestBody @Valid AuthVerifyForgotPasswordRequest request) {
-//        String email = forgotPasswordCodeUtil.get(CommonUtil.getForgotPasswordKey(request.getCode()));
-//        AuthResponse authResponse = authService.verifyForgotPassword(email, request);
-//        ApiResponse<AuthResponse> apiResponse = ApiResponse.<AuthResponse>builder()
-//                .data(authResponse)
-//                .code("auth-s-09")
-//                .message("Verify forgot password successfully")
-//                .build();
-//        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-//    }
-//
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<Void>> forGotPassword(@RequestBody @Valid AuthForgotPasswordRequest request) {
+        authService.forgotPassword(request);
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code("auth-s-08")
+                .success(true)
+                .message("Request to get new password successfully, please check your email")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PostMapping("/forgot-password/check-code")
+    public ResponseEntity<ApiResponse<AuthForgotPasswordCheckCodeResponse>> forGotPassword(@RequestBody @Valid AuthForgotPasswordCheckCodeRequest request) {
+        ApiResponse<AuthForgotPasswordCheckCodeResponse> apiResponse = ApiResponse.<AuthForgotPasswordCheckCodeResponse>builder()
+                .code("auth-s-09")
+                .success(true)
+                .message("Check code forgot password successfully")
+                .data(authService.forgotPasswordCheckCode(request))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PostMapping("/forgot-password/verify")
+    public ResponseEntity<ApiResponse<AuthForgotPasswordVerifyResponse>> verifyForgotPassword(@RequestBody @Valid AuthForgotPasswordVerifyRequest request) {
+        ApiResponse<AuthForgotPasswordVerifyResponse> apiResponse = ApiResponse.<AuthForgotPasswordVerifyResponse>builder()
+                .code("auth-s-09")
+                .message("Verify forgot password successfully")
+                .data(authService.verifyForgotPassword(request))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
     @GetMapping("/info")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<UserInfoResponse>> getInfo() {
