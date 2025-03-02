@@ -21,6 +21,8 @@
         <module>util-service</module>
         <module>user-service</module>
         <module>auth-service</module>
+        <module>company-app-service</module>
+        <module>hr-app-service</module>
         <module>api-getway</module>
     </modules>
 
@@ -37,6 +39,7 @@
         <springdoc.version>2.1.0</springdoc.version>
         <amqp.version>3.1.4</amqp.version>
         <redis.version>3.1.4</redis.version>
+        <mail.version>3.4.2</mail.version>
     </properties>
 
     <dependencyManagement>
@@ -131,6 +134,13 @@
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${redis.version}</version>
             </dependency>
+
+            <!-- Mail -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-mail</artifactId>
+                <version>${mail.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -144,12 +154,21 @@
             <artifactId>mapstruct</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
 

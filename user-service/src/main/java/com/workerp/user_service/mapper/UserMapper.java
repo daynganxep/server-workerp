@@ -1,11 +1,8 @@
 package com.workerp.user_service.mapper;
 
-import com.workerp.common_lib.dto.userservice.request.CreateUserRequest;
-import com.workerp.common_lib.dto.userservice.request.UserOAuth2LoginRequest;
-import com.workerp.common_lib.dto.userservice.response.CreateUserResponse;
-import com.workerp.common_lib.dto.userservice.response.UserForgotPasswordResponse;
-import com.workerp.common_lib.dto.userservice.response.UserInfoResponse;
-import com.workerp.common_lib.dto.userservice.response.UserOAuth2LoginResponse;
+import com.workerp.common_lib.dto.user_service.request.CreateUserRequest;
+import com.workerp.common_lib.dto.user_service.request.UserOAuth2LoginRequest;
+import com.workerp.common_lib.dto.user_service.response.*;
 import com.workerp.user_service.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,4 +22,6 @@ public interface UserMapper {
     UserOAuth2LoginResponse toUserOAuth2LoginResponse(User user);
 
     UserForgotPasswordResponse toUserForgotPasswordResponse(User user);
+
+    UserGetByIdResponse toUserGetByIdResponse(User user);
 }

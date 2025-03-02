@@ -1,8 +1,8 @@
 package com.workerp.user_service.controller;
 
 import com.workerp.common_lib.dto.api.ApiResponse;
-import com.workerp.common_lib.dto.userservice.request.*;
-import com.workerp.common_lib.dto.userservice.response.*;
+import com.workerp.common_lib.dto.user_service.request.*;
+import com.workerp.common_lib.dto.user_service.response.*;
 import com.workerp.user_service.service.UserService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
@@ -99,6 +99,18 @@ public class UserController {
                 .success(true)
                 .message("Forgot password successfully")
                 .data(userService.forgotPassword(request))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/{userId}")
+    @PermitAll
+    public ResponseEntity<ApiResponse<UserGetByIdResponse>> getUserById(@PathVariable String userId) {
+        ApiResponse<UserGetByIdResponse> apiResponse = ApiResponse.<UserGetByIdResponse>builder()
+                .code("user-s-09")
+                .success(true)
+                .message("Get user by id successfully")
+                .data(userService.getById(userId))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

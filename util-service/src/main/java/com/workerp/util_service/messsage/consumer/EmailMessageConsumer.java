@@ -21,6 +21,7 @@ public class EmailMessageConsumer {
             case VERIFY_REGISTER -> emailService.sendVerificationEmail(emailMessage);
             case WELCOME -> emailService.sendWelcomeEmail(emailMessage);
             case FORGOT_PASSWORD -> emailService.sendVerificationForgotPasswordEmail(emailMessage);
+            case INVITE_TO_COMPANY -> emailService.sendInviteToCompanyEmail(emailMessage);
         }
     }
 }

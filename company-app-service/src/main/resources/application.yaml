@@ -1,0 +1,45 @@
+server:
+  port: ${PORT:8084}
+
+spring:
+  config:
+    import: "optional:file:.env[.properties]"
+  application:
+    name: company-app-service
+  data:
+    mongodb:
+      host: ${MONGODB_HOST:localhost}
+      port: ${MONGODB_PORT:27017}
+      database: ${MONGODB_DATABASE:workerp_users}
+      username: ${MONGODB_USERNAME:root}
+      password: ${MONGODB_PASSWORD:rootpassword}
+      authentication-database: admin
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    exchange:
+      company: company.exchange
+    queue:
+      company: company.queue
+    routing-key:
+      company: company.routing.key
+app:
+  jwt:
+    access:
+      secret: ${JWT_ACCESS_SECRET}
+
+feign:
+  api-gateway:
+    url: http://localhost:8080
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full

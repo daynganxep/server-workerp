@@ -7,7 +7,7 @@ import com.workerp.common_lib.dto.authservice.response.AuthLoginResponse;
 import com.workerp.common_lib.dto.authservice.response.AuthRefreshTokenResponse;
 import com.workerp.auth_service.service.AuthService;
 import com.workerp.common_lib.dto.api.ApiResponse;
-import com.workerp.common_lib.dto.userservice.response.UserInfoResponse;
+import com.workerp.common_lib.dto.user_service.response.UserInfoResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

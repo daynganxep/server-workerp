@@ -2,8 +2,8 @@ package com.workerp.auth_service.restapi;
 
 import com.workerp.common_lib.annotation.ApiGatewayClient;
 import com.workerp.common_lib.dto.api.ApiResponse;
-import com.workerp.common_lib.dto.userservice.request.*;
-import com.workerp.common_lib.dto.userservice.response.*;
+import com.workerp.common_lib.dto.user_service.request.*;
+import com.workerp.common_lib.dto.user_service.response.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

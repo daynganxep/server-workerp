@@ -4,5 +4,6 @@ public enum EmailType {
     VERIFY_REGISTER,
     WELCOME,
     FORGOT_PASSWORD,
-    GENERIC
+    GENERIC,
+    INVITE_TO_COMPANY
 }

@@ -56,32 +56,25 @@ public class EmailService {
 
     public void sendVerificationEmail(EmailMessage emailMessage) {
         String code = emailMessage.getValues().getOrDefault("code", "123456");
-        Map<String, String> placeholders = Map.of(
-                "verifyUrl", String.format("http://localhost:8080/auth/register/verify/%s", code)
-        );
+        Map<String, String> placeholders = Map.of("verifyUrl", String.format("http://localhost:8080/auth/register/verify/%s", code));
         String content = loadEmailTemplate("HTMLTemplates/register.html", placeholders);
-        sendEmail(SendEmailDto.builder()
-                .to(emailMessage.getTo())
-                .subject("MAIL XÁC NHẬN ĐĂNG KÝ")
-                .text(content)
-                .build());
+        sendEmail(SendEmailDto.builder().to(emailMessage.getTo()).subject("MAIL XÁC NHẬN ĐĂNG KÝ").text(content).build());
     }
 
     public void sendWelcomeEmail(EmailMessage emailMessage) {
         String content = loadEmailTemplate("HTMLTemplates/welcome.html", emailMessage.getValues());
-        sendEmail(SendEmailDto.builder()
-                .to(emailMessage.getTo())
-                .subject("CHÀO MỪNG BẠN ĐẾN VỚI WORK-ERP")
-                .text(content)
-                .build());
+        sendEmail(SendEmailDto.builder().to(emailMessage.getTo()).subject("CHÀO MỪNG BẠN ĐẾN VỚI WORK-ERP").text(content).build());
     }
 
     public void sendVerificationForgotPasswordEmail(EmailMessage emailMessage) {
         String content = loadEmailTemplate("HTMLTemplates/forget-password.html", emailMessage.getValues());
-        sendEmail(SendEmailDto.builder()
-                .to(emailMessage.getTo())
-                .subject("KHÔI PHỤC MẬT KHẨU")
-                .text(content)
-                .build());
+        sendEmail(SendEmailDto.builder().to(emailMessage.getTo()).subject("KHÔI PHỤC MẬT KHẨU").text(content).build());
+    }
+
+    public void sendInviteToCompanyEmail(EmailMessage emailMessage) {
+        String code = emailMessage.getValues().getOrDefault("code", "123456");
+        emailMessage.getValues().put("verifyUrl", String.format("http://localhost:8080/api/hr-app/employees/invite-to-company/verify/%s", code));
+        String content = loadEmailTemplate("HTMLTemplates/invite-to-company.html", emailMessage.getValues());
+        sendEmail(SendEmailDto.builder().to(emailMessage.getTo()).subject("THƯ MỜI THAM GIA CÔNG TY").text(content).build());
     }
 }

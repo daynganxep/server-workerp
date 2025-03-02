@@ -1,7 +1,7 @@
 package com.workerp.user_service.service;
 
-import com.workerp.common_lib.dto.userservice.request.*;
-import com.workerp.common_lib.dto.userservice.response.*;
+import com.workerp.common_lib.dto.user_service.request.*;
+import com.workerp.common_lib.dto.user_service.response.*;
 import com.workerp.common_lib.exception.AppException;
 import com.workerp.common_lib.util.SecurityUtil;
 import com.workerp.user_service.mapper.UserMapper;
@@ -93,5 +93,10 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
         return userMapper.toUserForgotPasswordResponse(user);
+    }
+
+    public UserGetByIdResponse getById(String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "User not found", "user-f-09-01"));
+        return userMapper.toUserGetByIdResponse(user);
     }
 }

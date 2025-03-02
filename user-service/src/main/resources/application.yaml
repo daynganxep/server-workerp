@@ -13,13 +13,12 @@ spring:
       database: ${MONGODB_DATABASE:workerp_users}
       username: ${MONGODB_USERNAME:root}
       password: ${MONGODB_PASSWORD:rootpassword}
-      authentication-database: admin # MongoDB uses 'admin' db for authentication
+      authentication-database: admin # MongoDB uses 'admin' db for
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
 
-  rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
 app:
   jwt:
     access:
