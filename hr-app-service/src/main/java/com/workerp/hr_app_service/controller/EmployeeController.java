@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/hr-app/employees")
 @RequiredArgsConstructor
@@ -51,6 +53,18 @@ public class EmployeeController {
                 .success(true)
                 .message("Add owner to company successfully")
                 .data(employeeService.addOwnerToCompany(request))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/company/{companyId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<List<EmployeeResponse>>> getEmployeesByCompanyId(@PathVariable String companyId) {
+        ApiResponse<List<EmployeeResponse>> apiResponse = ApiResponse.<List<EmployeeResponse>>builder()
+                .code("hr-app-employee-04")
+                .success(true)
+                .message("Get all employees by companyid  successfully")
+                .data(employeeService.getAllByCompanyId(companyId))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

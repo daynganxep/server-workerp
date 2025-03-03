@@ -3,6 +3,7 @@ package com.workerp.company_app_service.controller;
 import com.workerp.common_lib.dto.api.ApiResponse;
 import com.workerp.common_lib.dto.company_app_service.reponse.CompanyResponse;
 import com.workerp.common_lib.dto.company_app_service.request.CompanyAppCreateCompanyRequest;
+import com.workerp.common_lib.dto.company_app_service.request.CompanyAppUpdateModules;
 import com.workerp.company_app_service.service.CompanyService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
@@ -38,6 +39,18 @@ public class CompanyController {
                 .success(true)
                 .message("Get company by id successfully")
                 .data(companyService.getById(companyId))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PostMapping("/{companyId}/update-modules")
+    @PermitAll
+    public ResponseEntity<ApiResponse<CompanyResponse>> updateModules(@RequestBody @Valid CompanyAppUpdateModules request, @PathVariable String companyId) {
+        ApiResponse<CompanyResponse> apiResponse = ApiResponse.<CompanyResponse>builder()
+                .code("company-app-company-03")
+                .success(true)
+                .message("Update modules successfully")
+                .data(companyService.updateModules(companyId, request))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

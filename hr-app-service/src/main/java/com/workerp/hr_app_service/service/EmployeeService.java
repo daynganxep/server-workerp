@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -77,5 +78,10 @@ public class EmployeeService {
         Employee employee = Employee.builder().userId(request.getUserId()).companyId(request.getCompanyId()).build();
         employeeRepository.save(employee);
         return employeeMapper.toEmployeeResponse(employeeRepository.save(employee));
+    }
+
+    public List<EmployeeResponse> getAllByCompanyId(String companyId){
+        List<Employee> employees = employeeRepository.findAllByCompanyId(companyId);
+        return employeeMapper.toEmployeeResponses(employees);
     }
 }

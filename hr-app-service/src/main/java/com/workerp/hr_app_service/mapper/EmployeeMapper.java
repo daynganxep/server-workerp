@@ -8,9 +8,12 @@ import com.workerp.hr_app_service.model.Employee;
 import com.workerp.hr_app_service.model.Position;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
     DepartmentResponse toDepartmentResponse(Department department);
     PositionResponse toPositionResponse(Position position);
     EmployeeResponse toEmployeeResponse(Employee employee);
+    List<EmployeeResponse> toEmployeeResponses(List<Employee> employees);
 }

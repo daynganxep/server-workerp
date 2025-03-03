@@ -1,5 +1,6 @@
 package com.workerp.company_app_service.model;
 
+import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.enums.company_app_service.ModuleRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,13 +33,13 @@ public class CompanyModuleRole {
     private Boolean active;
 
     @Field(name = "cmr_role", targetType = FieldType.STRING)
-    private ModuleRole role;
+    private ModuleRole moduleRole;
 
     @Field(name = "cpn_company_id", targetType = FieldType.OBJECT_ID)
     private String companyId;
 
-    @Field(name = "sys_module_id", targetType = FieldType.OBJECT_ID)
-    private String moduleId;
+    @Field(name = "sys_module_id", targetType = FieldType.STRING)
+    private ModuleCode moduleCode;
 
     @CreatedDate
     @Field(name = "created_at", targetType = FieldType.DATE_TIME)
