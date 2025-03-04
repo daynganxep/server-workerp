@@ -38,7 +38,7 @@ public class CompanyModuleRole {
     @Field(name = "cpn_company_id", targetType = FieldType.OBJECT_ID)
     private String companyId;
 
-    @Field(name = "sys_module_id", targetType = FieldType.STRING)
+    @Field(name = "sys_module_code", targetType = FieldType.STRING)
     private ModuleCode moduleCode;
 
     @CreatedDate

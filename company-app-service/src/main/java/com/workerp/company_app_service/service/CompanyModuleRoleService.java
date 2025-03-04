@@ -6,6 +6,8 @@ import com.workerp.common_lib.dto.hr_app_service.response.EmployeeResponse;
 import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.enums.company_app_service.ModuleRole;
 import com.workerp.common_lib.exception.AppException;
+import com.workerp.common_lib.service.BaseRedisService;
+import com.workerp.common_lib.util.Constant;
 import com.workerp.company_app_service.mapper.CompanyModuleRoleMapper;
 import com.workerp.company_app_service.model.Company;
 import com.workerp.company_app_service.model.CompanyModuleRole;
@@ -44,13 +46,7 @@ public class CompanyModuleRoleService {
         List<EmployeeResponse> employees = employeeServiceRestApi.getEmployeesByCompanyId(companyId).getData();
         for (ModuleCode moduleCode : newModuleCodes) {
             for (EmployeeResponse employee : employees) {
-                CompanyModuleRole companyModuleRole = companyModuleRoleRepository.findByCompanyIdAndModuleCodeAndUserId(companyId, moduleCode, employee.getUserId()).orElse(CompanyModuleRole.builder()
-                        .companyId(companyId)
-                        .moduleCode(moduleCode)
-                        .moduleRole(ModuleRole.USER)
-                        .active(true)
-                        .userId(employee.getUserId())
-                        .build());
+                CompanyModuleRole companyModuleRole = companyModuleRoleRepository.findByCompanyIdAndModuleCodeAndUserId(companyId, moduleCode, employee.getUserId()).orElse(CompanyModuleRole.builder().companyId(companyId).moduleCode(moduleCode).moduleRole(ModuleRole.USER).active(true).userId(employee.getUserId()).build());
                 companyModuleRole.setActive(true);
                 companyModuleRoleRepository.save(companyModuleRole);
             }

@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.event.AfterSaveEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -29,7 +31,15 @@ public class CompanyModuleRoleEventListener extends AbstractMongoEventListener<C
         deleteFromRedis(document);
     }
 
-    private void syncToRedis(CompanyModuleRole companyModuleRole) {
+    public void deleteOldRole() {
+        redisService
+                .getRedisTemplate()
+                .delete(redisService
+                        .getRedisTemplate()
+                        .keys("company-app:company-module-role:*"));
+    }
+
+    public void syncToRedis(CompanyModuleRole companyModuleRole) {
         String companyId = companyModuleRole.getCompanyId();
         String moduleCode = companyModuleRole.getModuleCode().toString();
         String userId = companyModuleRole.getUserId();
@@ -39,10 +49,10 @@ public class CompanyModuleRoleEventListener extends AbstractMongoEventListener<C
         log.info("Synced to Redis: key={}, value={}", key, moduleRole);
     }
 
-    private void deleteFromRedis(Document document) {
-        String companyId = document.getString("companyId");
-        String moduleCode = document.getString("moduleCode");
-        String userId = document.getString("userId");
+    public void deleteFromRedis(Document document) {
+        String companyId = document.getObjectId("cpn_company_id").toString();
+        String moduleCode = document.getString("sys_module_code");
+        String userId = document.getObjectId("cmr_user_id").toString();
         String key = Constant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode, userId);
         redisService.getRedisTemplate().delete(key);
         log.info("Deleted from Redis: key={}", key);
