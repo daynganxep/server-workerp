@@ -1,7 +1,7 @@
 package com.workerp.company_app_service.service;
 
 import com.workerp.common_lib.service.BaseRedisService;
-import com.workerp.common_lib.util.Constant;
+import com.workerp.common_lib.util.AppConstant;
 import com.workerp.company_app_service.model.CompanyModuleRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +10,6 @@ import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventLis
 import org.springframework.data.mongodb.core.mapping.event.AfterSaveEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.Set;
 
 @Slf4j
 @Component
@@ -44,7 +42,7 @@ public class CompanyModuleRoleEventListener extends AbstractMongoEventListener<C
         String moduleCode = companyModuleRole.getModuleCode().toString();
         String userId = companyModuleRole.getUserId();
         String moduleRole = companyModuleRole.getModuleRole().toString();
-        String key = Constant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode, userId);
+        String key = AppConstant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode, userId);
         redisService.getRedisTemplate().opsForValue().set(key, moduleRole);
         log.info("Synced to Redis: key={}, value={}", key, moduleRole);
     }
@@ -53,7 +51,7 @@ public class CompanyModuleRoleEventListener extends AbstractMongoEventListener<C
         String companyId = document.getObjectId("cpn_company_id").toString();
         String moduleCode = document.getString("sys_module_code");
         String userId = document.getObjectId("cmr_user_id").toString();
-        String key = Constant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode, userId);
+        String key = AppConstant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode, userId);
         redisService.getRedisTemplate().delete(key);
         log.info("Deleted from Redis: key={}", key);
     }

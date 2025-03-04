@@ -36,13 +36,6 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
-    exchange:
-      email: email.exchange
-    queue:
-      email: email.queue
-    routing-key:
-      email: email.routing.key
-
   data:
     redis:
       host: ${REDIS_HOST}
@@ -60,7 +53,8 @@ app:
   admin:
     email: ${ADMIN_EMAIL}
     password: ${ADMIN_PASSWORD}
-  clientReceiveRefreshTokenPath: ${CLIENT_RECEIVE_REFRESH_TOKEN_PATH}
+  client:
+    path: ${CLIENT_PATH}
 
 
 server:

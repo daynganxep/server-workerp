@@ -1,4 +1,4 @@
-package com.workerp.auth_service.config;
+package com.workerp.company_app_service.config;
 
 import com.workerp.common_lib.config.BaseRabbitMQConfig;
 import com.workerp.common_lib.util.AppConstant;
@@ -12,20 +12,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig extends BaseRabbitMQConfig {
     @Bean
-    public Queue emailQueue() {
-        return new Queue(AppConstant.EMAIL_QUEUE, true);
+    public Queue addEmployeeQueue() {
+        return new Queue(AppConstant.ADD_EMPLOYEE_QUEUE, true);
     }
 
     @Bean
-    public DirectExchange emailExchange() {
-        return new DirectExchange(AppConstant.EMAIL_EXCHANGE);
+    public DirectExchange addEmployeeExchange() {
+        return new DirectExchange(AppConstant.ADD_EMPLOYEE_EXCHANGE);
     }
 
     @Bean
-    public Binding emailBinding() {
+    public Binding addEmployeeBinding() {
         return BindingBuilder
-                .bind(emailQueue())
-                .to(emailExchange())
-                .with(AppConstant.EMAIL_ROUTING_KEY);
+                .bind(addEmployeeQueue())
+                .to(addEmployeeExchange())
+                .with(AppConstant.ADD_EMPLOYEE_ROUTING_KEY);
     }
 }

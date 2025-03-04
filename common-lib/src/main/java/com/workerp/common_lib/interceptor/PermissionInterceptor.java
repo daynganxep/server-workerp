@@ -5,7 +5,7 @@ import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.enums.company_app_service.ModuleRole;
 import com.workerp.common_lib.exception.AppException;
 import com.workerp.common_lib.service.BaseRedisService;
-import com.workerp.common_lib.util.Constant;
+import com.workerp.common_lib.util.AppConstant;
 import com.workerp.common_lib.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,7 +32,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
                 ModuleCode moduleCode = checkPermission.moduleCode();
                 ModuleRole requiredRole = checkPermission.moduleRole();
 
-                String key = Constant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode.toString(), userId);
+                String key = AppConstant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode.toString(), userId);
                 String userRoleStr = (String) redisService.getRedisTemplate().opsForValue().get(key);
 
                 if (userRoleStr == null) {

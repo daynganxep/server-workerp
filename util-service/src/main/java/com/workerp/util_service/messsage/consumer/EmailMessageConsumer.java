@@ -1,6 +1,7 @@
 package com.workerp.util_service.messsage.consumer;
 
 import com.workerp.common_lib.dto.message.EmailMessage;
+import com.workerp.common_lib.util.AppConstant;
 import com.workerp.util_service.enums.EmailType;
 import com.workerp.util_service.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class EmailMessageConsumer {
     private final EmailService emailService;
 
-    @RabbitListener(queues = "${spring.rabbitmq.queue.email}")
+    @RabbitListener(queues = AppConstant.EMAIL_QUEUE)
     public void receiveMessage(EmailMessage emailMessage) {
         log.info("Received message: {}", emailMessage);
         switch (EmailType.valueOf(emailMessage.getType())) {

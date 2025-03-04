@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends MongoRepository<Employee, String> {
     List<Employee> findAllByCompanyId(String companyId);
+    Boolean existsByCompanyIdAndUserId(String companyId, String userId);
 }

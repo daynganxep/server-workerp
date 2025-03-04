@@ -3,11 +3,10 @@ package com.workerp.company_app_service.service;
 import com.workerp.common_lib.dto.company_app_service.message.*;
 import com.workerp.common_lib.dto.company_app_service.reponse.CompanyModuleRoleResponse;
 import com.workerp.common_lib.dto.hr_app_service.response.EmployeeResponse;
+import com.workerp.common_lib.dto.message.CompanyModuleRoleMessage;
 import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.enums.company_app_service.ModuleRole;
 import com.workerp.common_lib.exception.AppException;
-import com.workerp.common_lib.service.BaseRedisService;
-import com.workerp.common_lib.util.Constant;
 import com.workerp.company_app_service.mapper.CompanyModuleRoleMapper;
 import com.workerp.company_app_service.model.Company;
 import com.workerp.company_app_service.model.CompanyModuleRole;
@@ -66,7 +65,7 @@ public class CompanyModuleRoleService {
         return companyModuleRoleMapper.toCompanyModuleResponses(companyModuleRoles);
     }
 
-    public void companyAddUser(CompanyAddUserMessage message) {
+    public void companyAddUser(CompanyModuleRoleMessage message) {
         Company company = companyRepository.findById(message.getCompanyId()).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company-cmr-02-01"));
         for (Module module : company.getModules()) {
             if (companyModuleRoleRepository.existsByUserIdAndCompanyIdAndModuleCode(message.getUserId(), company.getId(), module.getCode())) {
@@ -85,5 +84,4 @@ public class CompanyModuleRoleService {
         }
         log.info("User {} removed to company: {}", message.getUserId(), message.getCompanyId());
     }
-
 }

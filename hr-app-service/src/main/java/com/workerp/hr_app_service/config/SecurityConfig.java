@@ -12,7 +12,7 @@ public class SecurityConfig extends BaseSecurityConfig {
                           CustomAuthenticationEntryPoint authenticationEntryPoint) {
         super(jwtDecoder, jwtAuthenticationConverter, authenticationEntryPoint);
         this.publicRoutes = new String[]{
-                "/api/company-app/**"
+                "/api/hr-app/**"
         };
     }
 }

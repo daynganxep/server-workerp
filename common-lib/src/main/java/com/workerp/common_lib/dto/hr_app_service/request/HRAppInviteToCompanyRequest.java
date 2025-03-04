@@ -16,6 +16,5 @@ public class HRAppInviteToCompanyRequest implements Serializable {
     private static final long serialVersionUID = 1L;
     @NotBlank
     private String userId;
-    @NotBlank
     private String companyId;
 }

@@ -28,8 +28,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AuthController {
     private final AuthService authService;
 
-    @Value("${app.clientReceiveRefreshTokenPath:'http://localhost:3000/auth/receive-refresh-token'}")
-    private String clientReceiveRefreshTokenPath;
+    @Value("${app.client.path:'http://localhost:3000'}")
+    private String clientPath;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<Void>> registerRequest(@RequestBody @Valid AuthRegisterRequest request) {
@@ -45,7 +45,7 @@ public class AuthController {
     @GetMapping("/register/verify/{code}")
     public RedirectView verifyRegister(@PathVariable String code) {
         String refreshToken = authService.verifyRegister(code);
-        String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveRefreshTokenPath).queryParam("refreshToken", refreshToken).toUriString();
+        String redirectUrl = UriComponentsBuilder.fromUriString(clientPath + "/auth/receive-refresh-token").queryParam("refreshToken", refreshToken).toUriString();
         return new RedirectView(redirectUrl);
     }
 
@@ -96,7 +96,7 @@ public class AuthController {
     @GetMapping("/login/oauth2/success")
     public RedirectView loginOAuth2Success(@AuthenticationPrincipal OAuth2User oAuth2User) {
         String refreshToken = authService.loginOAuth2Success(oAuth2User);
-        String redirectUrl = UriComponentsBuilder.fromUriString(clientReceiveRefreshTokenPath).queryParam("refreshToken", refreshToken).toUriString();
+        String redirectUrl = UriComponentsBuilder.fromUriString(clientPath + "/auth/receive-refresh-token").queryParam("refreshToken", refreshToken).toUriString();
         return new RedirectView(redirectUrl);
     }
 

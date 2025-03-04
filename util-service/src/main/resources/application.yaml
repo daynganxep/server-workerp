@@ -24,12 +24,6 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
-    exchange:
-      email: email.exchange
-    queue:
-      email: email.queue
-    routing-key:
-      email: email.routing.key
   data:
     redis:
       host: ${REDIS_HOST}

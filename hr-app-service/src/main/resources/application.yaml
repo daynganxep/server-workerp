@@ -25,16 +25,12 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
-    exchange:
-      email: email.exchange
-    queue:
-      email: email.queue
-    routing-key:
-      email: email.routing.key
 app:
   jwt:
     access:
       secret: ${JWT_ACCESS_SECRET}
+  client:
+    path: ${CLIENT_PATH:'http://localhost:3000/'}
 
 feign:
   api-gateway:

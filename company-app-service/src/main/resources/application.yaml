@@ -23,12 +23,6 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
-    exchange:
-      company: company.exchange
-    queue:
-      company: company.queue
-    routing-key:
-      company: company.routing.key
 app:
   jwt:
     access:
