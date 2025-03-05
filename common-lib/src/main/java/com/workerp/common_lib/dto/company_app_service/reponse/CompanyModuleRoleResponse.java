@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class CompanyModuleRoleResponse {
+    private String id;
     private String userId;
     private Boolean active;
     private ModuleRole moduleRole;

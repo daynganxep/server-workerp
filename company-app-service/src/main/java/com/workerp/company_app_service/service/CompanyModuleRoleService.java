@@ -2,11 +2,13 @@ package com.workerp.company_app_service.service;
 
 import com.workerp.common_lib.dto.company_app_service.message.*;
 import com.workerp.common_lib.dto.company_app_service.reponse.CompanyModuleRoleResponse;
+import com.workerp.common_lib.dto.company_app_service.request.CompanyModuleRoleModifyRequest;
 import com.workerp.common_lib.dto.hr_app_service.response.EmployeeResponse;
 import com.workerp.common_lib.dto.message.CompanyModuleRoleMessage;
 import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.enums.company_app_service.ModuleRole;
 import com.workerp.common_lib.exception.AppException;
+import com.workerp.common_lib.util.SecurityUtil;
 import com.workerp.company_app_service.mapper.CompanyModuleRoleMapper;
 import com.workerp.company_app_service.model.Company;
 import com.workerp.company_app_service.model.CompanyModuleRole;
@@ -19,7 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.security.Security;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -59,9 +64,18 @@ public class CompanyModuleRoleService {
         log.info("Modules updated from company");
     }
 
-    public List<CompanyModuleRoleResponse> getAll(String companyId) {
+    public List<CompanyModuleRoleResponse> getAll() {
+        String companyId = SecurityUtil.getCompanyId();
         Company company = companyRepository.findById(companyId).orElseThrow();
         List<CompanyModuleRole> companyModuleRoles = companyModuleRoleRepository.findAllByCompanyIdAndModuleCodeIn(companyId, company.getModules().stream().map(Module::getCode).toList());
+        return companyModuleRoleMapper.toCompanyModuleResponses(companyModuleRoles);
+    }
+
+    public List<CompanyModuleRoleResponse> getByEmployee() {
+        String companyId = SecurityUtil.getCompanyId();
+        String userId = SecurityUtil.getUserId();
+        Company company = companyRepository.findById(companyId).orElseThrow();
+        List<CompanyModuleRole> companyModuleRoles = companyModuleRoleRepository.findAllByCompanyIdAndModuleCodeInAndUserId(companyId, company.getModules().stream().map(Module::getCode).toList(), userId);
         return companyModuleRoleMapper.toCompanyModuleResponses(companyModuleRoles);
     }
 
@@ -83,5 +97,20 @@ public class CompanyModuleRoleService {
             companyModuleRoleRepository.deleteByUserIdAndCompanyIdAndModuleCode(message.getUserId(), company.getId(), module.getCode());
         }
         log.info("User {} removed to company: {}", message.getUserId(), message.getCompanyId());
+    }
+
+    public List<CompanyModuleRoleResponse> modifyMany(List<CompanyModuleRoleModifyRequest> companyModuleRoleModifyRequests) {
+        String companyId = SecurityUtil.getCompanyId();
+        List<CompanyModuleRole> companyModuleRoles = new ArrayList<>();
+        for (CompanyModuleRoleModifyRequest companyModuleRoleModifyRequest : companyModuleRoleModifyRequests) {
+            Optional<CompanyModuleRole> companyModuleRoleOptional = companyModuleRoleRepository.findById(companyModuleRoleModifyRequest.getId());
+            if (companyModuleRoleOptional.isEmpty()) continue;
+            CompanyModuleRole companyModuleRole = companyModuleRoleOptional.get();
+            if (!companyId.equals(companyModuleRole.getCompanyId())) continue;
+            companyModuleRole.setActive(companyModuleRoleModifyRequest.getActive());
+            companyModuleRole.setModuleRole(companyModuleRoleModifyRequest.getModuleRole());
+            companyModuleRoles.add(companyModuleRoleRepository.save(companyModuleRole));
+        }
+        return companyModuleRoleMapper.toCompanyModuleResponses(companyModuleRoles);
     }
 }

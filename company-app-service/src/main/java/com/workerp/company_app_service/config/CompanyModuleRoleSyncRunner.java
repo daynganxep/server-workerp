@@ -2,7 +2,7 @@ package com.workerp.company_app_service.config;
 
 import com.workerp.company_app_service.model.CompanyModuleRole;
 import com.workerp.company_app_service.repository.CompanyModuleRoleRepository;
-import com.workerp.company_app_service.service.CompanyModuleRoleEventListener;
+import com.workerp.company_app_service.listener.CompanyModuleRoleEventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

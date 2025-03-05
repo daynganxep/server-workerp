@@ -1,4 +1,4 @@
-package com.workerp.company_app_service.service;
+package com.workerp.company_app_service.listener;
 
 import com.workerp.common_lib.service.BaseRedisService;
 import com.workerp.common_lib.util.AppConstant;
@@ -39,11 +39,16 @@ public class CompanyModuleRoleEventListener extends AbstractMongoEventListener<C
 
     public void syncToRedis(CompanyModuleRole companyModuleRole) {
         String companyId = companyModuleRole.getCompanyId();
+        Boolean active = companyModuleRole.getActive();
         String moduleCode = companyModuleRole.getModuleCode().toString();
         String userId = companyModuleRole.getUserId();
         String moduleRole = companyModuleRole.getModuleRole().toString();
         String key = AppConstant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode, userId);
-        redisService.getRedisTemplate().opsForValue().set(key, moduleRole);
+        if (active) {
+            redisService.getRedisTemplate().opsForValue().set(key, moduleRole);
+        } else {
+            redisService.getRedisTemplate().delete(key);
+        }
         log.info("Synced to Redis: key={}, value={}", key, moduleRole);
     }
 

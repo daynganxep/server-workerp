@@ -17,4 +17,6 @@ public interface CompanyModuleRoleRepository extends MongoRepository<CompanyModu
     Optional<CompanyModuleRole> findByCompanyIdAndModuleCodeAndUserId(String companyId, ModuleCode moduleCode, String userId);
 
     List<CompanyModuleRole> findAllByCompanyIdAndModuleCodeIn(String companyId, List<ModuleCode> moduleCodes);
+
+    List<CompanyModuleRole> findAllByCompanyIdAndModuleCodeInAndUserId(String companyId, List<ModuleCode> moduleCodes, String userId);
 }

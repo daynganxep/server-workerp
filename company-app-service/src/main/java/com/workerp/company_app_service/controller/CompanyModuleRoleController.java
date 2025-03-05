@@ -1,16 +1,18 @@
 package com.workerp.company_app_service.controller;
 
+import com.workerp.common_lib.annotation.CheckPermission;
 import com.workerp.common_lib.dto.api.ApiResponse;
 import com.workerp.common_lib.dto.company_app_service.reponse.CompanyModuleRoleResponse;
+import com.workerp.common_lib.dto.company_app_service.request.CompanyModuleRoleModifyRequest;
+import com.workerp.common_lib.enums.company_app_service.ModuleCode;
+import com.workerp.common_lib.enums.company_app_service.ModuleRole;
 import com.workerp.company_app_service.service.CompanyModuleRoleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,15 +22,27 @@ import java.util.List;
 public class CompanyModuleRoleController {
     private final CompanyModuleRoleService companyModuleRoleService;
 
-    @GetMapping("/company/{companyId}")
+    @GetMapping("/company")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> getAllByCompanyId(@PathVariable String companyId) {
-        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder()
-                .code("company-app-cmr-01")
-                .success(true)
-                .message("Get all company module roles successfully")
-                .data(companyModuleRoleService.getAll(companyId))
-                .build();
+    @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.MANAGER)
+    public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> getAllByCompanyId() {
+        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company-app-cmr-01").success(true).message("Get all company module roles successfully").data(companyModuleRoleService.getAll()).build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/company/employee")
+    @PreAuthorize("isAuthenticated()")
+    @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.USER)
+    public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> getByEmployee() {
+        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company-app-cmr-02").success(true).message("Get company module roles by employee successfully").data(companyModuleRoleService.getByEmployee()).build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PatchMapping("/company")
+    @PreAuthorize("isAuthenticated()")
+    @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.MANAGER)
+    public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> modifyMany(@RequestBody @Valid List<CompanyModuleRoleModifyRequest> companyModuleRoleModifyRequests) {
+        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company-app-cmr-03").success(true).message("Modify many company module roles successfully").data(companyModuleRoleService.modifyMany(companyModuleRoleModifyRequests)).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }
