@@ -1,5 +1,7 @@
 package com.workerp.company_app_service.listener;
 
+import com.workerp.common_lib.enums.company_app_service.ModuleCode;
+import com.workerp.common_lib.enums.company_app_service.ModuleRole;
 import com.workerp.common_lib.service.BaseRedisService;
 import com.workerp.common_lib.util.AppConstant;
 import com.workerp.company_app_service.model.CompanyModuleRole;
@@ -10,6 +12,8 @@ import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventLis
 import org.springframework.data.mongodb.core.mapping.event.AfterSaveEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -42,14 +46,18 @@ public class CompanyModuleRoleEventListener extends AbstractMongoEventListener<C
         Boolean active = companyModuleRole.getActive();
         String moduleCode = companyModuleRole.getModuleCode().toString();
         String userId = companyModuleRole.getUserId();
-        String moduleRole = companyModuleRole.getModuleRole().toString();
+        List<ModuleRole> moduleRoles = companyModuleRole.getModuleRoles();
         String key = AppConstant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode, userId);
-        if (active) {
-            redisService.getRedisTemplate().opsForValue().set(key, moduleRole);
-        } else {
-            redisService.getRedisTemplate().delete(key);
+        try {
+            if (active) {
+                redisService.getRedisTemplate().opsForValue().set(key, moduleRoles);
+            } else {
+                redisService.getRedisTemplate().delete(key);
+            }
+        } catch (Exception e) {
+            log.error("Failed to sync to Redis: key={}, error={}", key, e.getMessage());
         }
-        log.info("Synced to Redis: key={}, value={}", key, moduleRole);
+        log.info("Synced to Redis: key={}, value={}", key, moduleRoles);
     }
 
     public void deleteFromRedis(Document document) {

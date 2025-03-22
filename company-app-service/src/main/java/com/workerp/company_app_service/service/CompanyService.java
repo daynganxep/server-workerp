@@ -3,6 +3,7 @@ package com.workerp.company_app_service.service;
 import com.workerp.common_lib.dto.company_app_service.message.CompanyAddOwnerMessage;
 import com.workerp.common_lib.dto.company_app_service.request.CompanyAppUpdateModules;
 import com.workerp.common_lib.dto.hr_app_service.request.HRAppAddOwnerToCompanyRequest;
+import com.workerp.common_lib.dto.hr_app_service.response.EmployeeResponse;
 import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.exception.AppException;
 import com.workerp.common_lib.util.SecurityUtil;
@@ -63,5 +64,11 @@ public class CompanyService {
         company.setModules(modules);
         companyRepository.save(company);
         return companyMapper.toCompanyResponse(company);
+    }
+
+    public List<CompanyResponse > getAllMyCompanies(){
+        List<EmployeeResponse> employeeResponses = employeeServiceRestApi.getAllByUser().getData();
+        List<Company> companies = companyRepository.findAllById(employeeResponses.stream().map(EmployeeResponse::getCompanyId).toList());
+        return companyMapper.toCompanyResponses(companies);
     }
 }

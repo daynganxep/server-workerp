@@ -74,4 +74,16 @@ public class EmployeeController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @GetMapping("/user")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<List<EmployeeResponse>>> getAllByUser() {
+        ApiResponse<List<EmployeeResponse>> apiResponse = ApiResponse.<List<EmployeeResponse>>builder()
+                .code("hr-app-employee-05")
+                .success(true)
+                .message("Get all employees by user  successfully")
+                .data(employeeService.getAllByUser())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

@@ -46,7 +46,8 @@ public class EmailService {
             byte[] fileData = StreamUtils.copyToByteArray(resource.getInputStream());
             String content = new String(fileData, StandardCharsets.UTF_8);
             for (Map.Entry<String, String> entry : placeholders.entrySet()) {
-                content = content.replace("{{" + entry.getKey() + "}}", entry.getValue());
+                String replacement = entry.getValue() != null ? entry.getValue() : "";
+                content = content.replace("{{" + entry.getKey() + "}}", replacement);
             }
             return content;
         } catch (IOException e) {

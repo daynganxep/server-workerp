@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/company-app/companies")
 @RequiredArgsConstructor
@@ -55,6 +57,18 @@ public class CompanyController {
                 .success(true)
                 .message("Update modules successfully")
                 .data(companyService.updateModules(companyId, request))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<List<CompanyResponse>>> getAllMyCompanies() {
+        ApiResponse<List<CompanyResponse>> apiResponse = ApiResponse.<List<CompanyResponse>>builder()
+                .code("company-app-company-04")
+                .success(true)
+                .message("Get all my companies")
+                .data(companyService.getAllMyCompanies())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

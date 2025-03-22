@@ -36,11 +36,12 @@ public class CompanyModuleRoleService {
     private final CompanyModuleRoleMapper companyModuleRoleMapper;
 
     public void companyAddOwner(CompanyAddOwnerMessage message, List<Module> modules) {
+        List<ModuleRole> ownerModuleRoles = List.of(ModuleRole.MANAGER,ModuleRole.USER);
         for (Module module : modules) {
             if (companyModuleRoleRepository.existsByUserIdAndCompanyIdAndModuleCode(message.getUserId(), message.getCompanyId(), module.getCode())) {
                 continue;
             }
-            CompanyModuleRole companyModuleRole = CompanyModuleRole.builder().companyId(message.getCompanyId()).userId(message.getUserId()).moduleCode(module.getCode()).moduleRole(ModuleRole.MANAGER).active(true).build();
+            CompanyModuleRole companyModuleRole = CompanyModuleRole.builder().companyId(message.getCompanyId()).userId(message.getUserId()).moduleCode(module.getCode()).moduleRoles(ownerModuleRoles).active(true).build();
             companyModuleRoleRepository.save(companyModuleRole);
         }
         log.info("Owner {} added to company: {}", message.getUserId(), message.getCompanyId());
@@ -50,9 +51,16 @@ public class CompanyModuleRoleService {
         List<EmployeeResponse> employees = employeeServiceRestApi.getEmployeesByCompanyId(companyId).getData();
         for (ModuleCode moduleCode : newModuleCodes) {
             for (EmployeeResponse employee : employees) {
-                CompanyModuleRole companyModuleRole = companyModuleRoleRepository.findByCompanyIdAndModuleCodeAndUserId(companyId, moduleCode, employee.getUserId()).orElse(CompanyModuleRole.builder().companyId(companyId).moduleCode(moduleCode).moduleRole(ModuleRole.USER).active(true).userId(employee.getUserId()).build());
-                companyModuleRole.setActive(true);
-                companyModuleRoleRepository.save(companyModuleRole);
+                if (!companyModuleRoleRepository.existsByUserIdAndCompanyIdAndModuleCode(employee.getUserId(), companyId, moduleCode)) {
+                    CompanyModuleRole companyModuleRole = CompanyModuleRole.builder()
+                            .companyId(companyId)
+                            .moduleCode(moduleCode)
+                            .moduleRoles(List.of(ModuleRole.USER))
+                            .active(false)
+                            .userId(employee.getUserId())
+                            .build();
+                    companyModuleRoleRepository.save(companyModuleRole);
+                }
             }
         }
         for (ModuleCode moduleCode : delModuleCodes) {
@@ -71,11 +79,10 @@ public class CompanyModuleRoleService {
         return companyModuleRoleMapper.toCompanyModuleResponses(companyModuleRoles);
     }
 
-    public List<CompanyModuleRoleResponse> getByEmployee() {
-        String companyId = SecurityUtil.getCompanyId();
+    public List<CompanyModuleRoleResponse> getByEmployee(String companyId) {
         String userId = SecurityUtil.getUserId();
         Company company = companyRepository.findById(companyId).orElseThrow();
-        List<CompanyModuleRole> companyModuleRoles = companyModuleRoleRepository.findAllByCompanyIdAndModuleCodeInAndUserId(companyId, company.getModules().stream().map(Module::getCode).toList(), userId);
+        List<CompanyModuleRole> companyModuleRoles = companyModuleRoleRepository.findAllByCompanyIdAndModuleCodeInAndUserIdAndActiveIsTrue(companyId, company.getModules().stream().map(Module::getCode).toList(), userId);
         return companyModuleRoleMapper.toCompanyModuleResponses(companyModuleRoles);
     }
 
@@ -85,7 +92,7 @@ public class CompanyModuleRoleService {
             if (companyModuleRoleRepository.existsByUserIdAndCompanyIdAndModuleCode(message.getUserId(), company.getId(), module.getCode())) {
                 continue;
             }
-            CompanyModuleRole companyModuleRole = CompanyModuleRole.builder().companyId(company.getId()).userId(message.getUserId()).moduleCode(module.getCode()).moduleRole(ModuleRole.USER).active(true).build();
+            CompanyModuleRole companyModuleRole = CompanyModuleRole.builder().companyId(company.getId()).userId(message.getUserId()).moduleCode(module.getCode()).moduleRoles(List.of(ModuleRole.USER)).active(false).build();
             companyModuleRoleRepository.save(companyModuleRole);
         }
         log.info("User {} added to company: {}", message.getUserId(), message.getCompanyId());
@@ -101,14 +108,17 @@ public class CompanyModuleRoleService {
 
     public List<CompanyModuleRoleResponse> modifyMany(List<CompanyModuleRoleModifyRequest> companyModuleRoleModifyRequests) {
         String companyId = SecurityUtil.getCompanyId();
+        Company company = companyRepository.findById(companyId).orElseThrow();
+        String ownerId = company.getOwner();
         List<CompanyModuleRole> companyModuleRoles = new ArrayList<>();
         for (CompanyModuleRoleModifyRequest companyModuleRoleModifyRequest : companyModuleRoleModifyRequests) {
             Optional<CompanyModuleRole> companyModuleRoleOptional = companyModuleRoleRepository.findById(companyModuleRoleModifyRequest.getId());
             if (companyModuleRoleOptional.isEmpty()) continue;
             CompanyModuleRole companyModuleRole = companyModuleRoleOptional.get();
+            if(companyModuleRole.getUserId().equals(ownerId)) continue;
             if (!companyId.equals(companyModuleRole.getCompanyId())) continue;
             companyModuleRole.setActive(companyModuleRoleModifyRequest.getActive());
-            companyModuleRole.setModuleRole(companyModuleRoleModifyRequest.getModuleRole());
+            companyModuleRole.setModuleRoles(companyModuleRoleModifyRequest.getModuleRoles());
             companyModuleRoles.add(companyModuleRoleRepository.save(companyModuleRole));
         }
         return companyModuleRoleMapper.toCompanyModuleResponses(companyModuleRoles);

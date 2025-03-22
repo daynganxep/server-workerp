@@ -99,4 +99,10 @@ public class EmployeeService {
         List<Employee> employees = employeeRepository.findAllByCompanyId(companyId);
         return employeeMapper.toEmployeeResponses(employees);
     }
+
+    public List<EmployeeResponse> getAllByUser(){
+        String userId = SecurityUtil.getUserId();
+        List<Employee>  employees = employeeRepository.findAllByUserId(userId);
+        return employeeMapper.toEmployeeResponses(employees);
+    }
 }

@@ -19,4 +19,7 @@ public interface EmployeeServiceRestApi {
 
     @GetMapping("/api/hr-app/employees/company/{companyId}")
     ApiResponse<List<EmployeeResponse>> getEmployeesByCompanyId(@PathVariable String companyId);
+
+    @GetMapping("/api/hr-app/employees/user")
+    ApiResponse<List<EmployeeResponse>> getAllByUser();
 }

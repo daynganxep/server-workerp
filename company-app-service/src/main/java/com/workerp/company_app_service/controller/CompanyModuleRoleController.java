@@ -30,15 +30,14 @@ public class CompanyModuleRoleController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @GetMapping("/company/employee")
+    @GetMapping("/company/{companyId}/employee")
     @PreAuthorize("isAuthenticated()")
-    @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.USER)
-    public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> getByEmployee() {
-        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company-app-cmr-02").success(true).message("Get company module roles by employee successfully").data(companyModuleRoleService.getByEmployee()).build();
+    public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> getByEmployee(@PathVariable String companyId) {
+        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company-app-cmr-02").success(true).message("Get company module roles by employee successfully").data(companyModuleRoleService.getByEmployee(companyId)).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @PatchMapping("/company")
+    @PostMapping("/company")
     @PreAuthorize("isAuthenticated()")
     @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.MANAGER)
     public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> modifyMany(@RequestBody @Valid List<CompanyModuleRoleModifyRequest> companyModuleRoleModifyRequests) {
