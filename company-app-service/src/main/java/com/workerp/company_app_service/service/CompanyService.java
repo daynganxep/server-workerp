@@ -3,7 +3,7 @@ package com.workerp.company_app_service.service;
 import com.workerp.common_lib.dto.company_app_service.message.CompanyAddOwnerMessage;
 import com.workerp.common_lib.dto.company_app_service.request.CompanyAppUpdateCompanyInforRequest;
 import com.workerp.common_lib.dto.company_app_service.request.CompanyAppUpdateModules;
-import com.workerp.common_lib.dto.hr_app_service.request.HRAppAddOwnerToCompanyRequest;
+import com.workerp.common_lib.dto.hr_app_service.request.HRAppCompanyAddOwnerRequest;
 import com.workerp.common_lib.dto.hr_app_service.response.EmployeeResponse;
 import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.exception.AppException;
@@ -42,7 +42,7 @@ public class CompanyService {
         Company company = Company.builder().owner(owner).name(request.getName()).domain(request.getDomain()).active(true).modules(modules).build();
         companyRepository.save(company);
         companyModuleRoleService.companyAddOwner(CompanyAddOwnerMessage.builder().companyId(company.getId()).userId(owner).build(), modules);
-        employeeServiceRestApi.addOwnerToCompany(HRAppAddOwnerToCompanyRequest.builder().companyId(company.getId()).userId(owner).build());
+        employeeServiceRestApi.addOwnerToCompany(HRAppCompanyAddOwnerRequest.builder().companyId(company.getId()).userId(owner).build());
         return companyMapper.toCompanyResponse(company);
     }
 

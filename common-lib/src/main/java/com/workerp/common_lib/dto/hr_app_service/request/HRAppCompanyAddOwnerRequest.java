@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class HRAppAddOwnerToCompanyRequest {
+public class HRAppCompanyAddOwnerRequest {
     private String userId;
     private String companyId;
 }
