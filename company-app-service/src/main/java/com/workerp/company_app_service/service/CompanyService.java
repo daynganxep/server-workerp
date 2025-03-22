@@ -1,6 +1,7 @@
 package com.workerp.company_app_service.service;
 
 import com.workerp.common_lib.dto.company_app_service.message.CompanyAddOwnerMessage;
+import com.workerp.common_lib.dto.company_app_service.request.CompanyAppUpdateCompanyInforRequest;
 import com.workerp.common_lib.dto.company_app_service.request.CompanyAppUpdateModules;
 import com.workerp.common_lib.dto.hr_app_service.request.HRAppAddOwnerToCompanyRequest;
 import com.workerp.common_lib.dto.hr_app_service.response.EmployeeResponse;
@@ -70,5 +71,13 @@ public class CompanyService {
         List<EmployeeResponse> employeeResponses = employeeServiceRestApi.getAllByUser().getData();
         List<Company> companies = companyRepository.findAllById(employeeResponses.stream().map(EmployeeResponse::getCompanyId).toList());
         return companyMapper.toCompanyResponses(companies);
+    }
+
+    public CompanyResponse updateInfo(CompanyAppUpdateCompanyInforRequest request){
+        String companyId = SecurityUtil.getCompanyId();
+        Company company = companyRepository.findById(companyId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company-app-company-f-05-01"));
+        companyMapper.updateCompanyFromRequest(company,request);
+        companyRepository.save(company);
+        return companyMapper.toCompanyResponse(company);
     }
 }

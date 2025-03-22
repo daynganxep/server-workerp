@@ -33,6 +33,9 @@ public class Company {
     @Field(name = "cpn_domain", targetType = FieldType.STRING)
     private String domain;
 
+    @Field(name = "cpn_avatar", targetType = FieldType.STRING)
+    private String avatar;
+
     @Field(name = "cpn_active", targetType = FieldType.BOOLEAN)
     private Boolean active;
 

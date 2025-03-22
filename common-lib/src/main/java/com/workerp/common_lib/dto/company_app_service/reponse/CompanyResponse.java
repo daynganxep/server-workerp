@@ -12,5 +12,6 @@ public class CompanyResponse {
     private String name;
     private String domain;
     private Boolean active;
+    private String avatar;
     private List<ModuleResponse> modules;
 }

@@ -4,6 +4,7 @@ import com.workerp.common_lib.annotation.CheckPermission;
 import com.workerp.common_lib.dto.api.ApiResponse;
 import com.workerp.common_lib.dto.company_app_service.reponse.CompanyResponse;
 import com.workerp.common_lib.dto.company_app_service.request.CompanyAppCreateCompanyRequest;
+import com.workerp.common_lib.dto.company_app_service.request.CompanyAppUpdateCompanyInforRequest;
 import com.workerp.common_lib.dto.company_app_service.request.CompanyAppUpdateModules;
 import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.enums.company_app_service.ModuleRole;
@@ -69,6 +70,19 @@ public class CompanyController {
                 .success(true)
                 .message("Get all my companies")
                 .data(companyService.getAllMyCompanies())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PutMapping
+    @PreAuthorize("isAuthenticated()")
+    @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.MANAGER)
+    public ResponseEntity<ApiResponse<CompanyResponse>> updateInfo(@RequestBody @Valid CompanyAppUpdateCompanyInforRequest request) {
+        ApiResponse<CompanyResponse> apiResponse = ApiResponse.<CompanyResponse>builder()
+                .code("company-app-company-05")
+                .success(true)
+                .message("Updated company info successfully")
+                .data(companyService.updateInfo(request))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
