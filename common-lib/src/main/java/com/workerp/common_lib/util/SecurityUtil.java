@@ -27,4 +27,13 @@ public class SecurityUtil {
         }
         return companyId;
     }
+
+    public static String getEmployeeId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String companyId = request.getHeader("xxx-employee-id");
+        if (companyId == null || companyId.isEmpty()) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Header 'xxx-employee-id' is missing or empty", "security-f-03");
+        }
+        return companyId;
+    }
 }

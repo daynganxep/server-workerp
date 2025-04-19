@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.List;
+
 
 @Data
 public class CompanyModuleRoleModifyRequest {
@@ -13,5 +15,5 @@ public class CompanyModuleRoleModifyRequest {
     @NotNull
     private Boolean active;
     @NotNull
-    private ModuleRole moduleRole;
+    private List<ModuleRole> moduleRoles;
 }

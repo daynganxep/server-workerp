@@ -47,7 +47,7 @@ public class RefreshTokenUtil extends BaseJWTUtil {
     public JWTPayload verifyToken(String token) {
         JWTPayload payload = super.verifyToken(token);
         String key = getRedisKey(payload.getId());
-        Object storedRefreshToken = redisService.getValue(key);
+        Object storedRefreshToken = redisService.getValue(key, Object.class);
 
         if (storedRefreshToken == null) {
             throw new AppException(HttpStatus.NOT_FOUND, "Refresh token not found", "jwt-f-01-01");

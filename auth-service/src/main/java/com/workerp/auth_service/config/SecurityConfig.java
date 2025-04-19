@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.Arrays;
+
 @Configuration
 public class SecurityConfig extends BaseSecurityConfig {
     private final CustomOAuth2UserService oAuth2UserService;
@@ -61,7 +63,6 @@ public class SecurityConfig extends BaseSecurityConfig {
                 .requiresChannel(channel -> channel
                         .requestMatchers(r -> r.getHeader("Accept") == null ||
                                 !r.getHeader("Accept").contains(MediaType.APPLICATION_JSON_VALUE)));
-
         return http.build();
     }
 }

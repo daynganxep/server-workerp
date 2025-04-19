@@ -7,6 +7,7 @@ import com.workerp.hr_app_service.model.Department;
 import com.workerp.hr_app_service.model.Employee;
 import com.workerp.hr_app_service.model.Position;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 

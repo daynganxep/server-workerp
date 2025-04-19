@@ -10,8 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CompanyModuleRoleMapper {
-    CompanyModuleRole toCompanyModuleRole(CompanyModuleRoleRequest request);
-
     CompanyModuleRoleResponse toCompanyModuleResponse(CompanyModuleRole companyModuleRole);
 
     List<CompanyModuleRoleResponse> toCompanyModuleResponses(List<CompanyModuleRole> companyModuleRoles);

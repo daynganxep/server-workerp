@@ -3,8 +3,9 @@ package com.workerp.hr_app_service.controller;
 
 import com.workerp.common_lib.annotation.CheckPermission;
 import com.workerp.common_lib.dto.api.ApiResponse;
-import com.workerp.common_lib.dto.hr_app_service.request.HRAppAddOwnerToCompanyRequest;
-import com.workerp.common_lib.dto.hr_app_service.request.HRAppInviteToCompanyRequest;
+import com.workerp.common_lib.dto.hr_app_service.request.HRAppCompanyAddOwnerRequest;
+import com.workerp.common_lib.dto.hr_app_service.request.HRAppEmployeeUpdateRequest;
+import com.workerp.common_lib.dto.hr_app_service.request.HRAppCompanyInviteEmployeeRequest;
 import com.workerp.common_lib.dto.hr_app_service.response.EmployeeResponse;
 import com.workerp.common_lib.enums.company_app_service.ModuleCode;
 import com.workerp.common_lib.enums.company_app_service.ModuleRole;
@@ -18,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class EmployeeController {
     @PostMapping("/invite-to-company")
     @PreAuthorize("isAuthenticated()")
     @CheckPermission(moduleCode = ModuleCode.HR, moduleRole = ModuleRole.MANAGER)
-    public ResponseEntity<ApiResponse<Void>> inviteToCompany(@RequestBody @Valid HRAppInviteToCompanyRequest request) {
+    public ResponseEntity<ApiResponse<Void>> inviteToCompany(@RequestBody @Valid HRAppCompanyInviteEmployeeRequest request) {
         employeeService.inviteToCompany(request);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
                 .code("hr-app-employee-01")
@@ -53,7 +53,7 @@ public class EmployeeController {
 
     @PostMapping("/add-owner-to-company")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiResponse<EmployeeResponse>> addOwnerToCompany(@RequestBody HRAppAddOwnerToCompanyRequest request) {
+    public ResponseEntity<ApiResponse<EmployeeResponse>> addOwnerToCompany(@RequestBody HRAppCompanyAddOwnerRequest request) {
         ApiResponse<EmployeeResponse> apiResponse = ApiResponse.<EmployeeResponse>builder()
                 .code("hr-app-employee-03")
                 .success(true)
@@ -71,6 +71,44 @@ public class EmployeeController {
                 .success(true)
                 .message("Get all employees by companyid  successfully")
                 .data(employeeService.getAllByCompanyId(companyId))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/user")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<List<EmployeeResponse>>> getAllByUser() {
+        ApiResponse<List<EmployeeResponse>> apiResponse = ApiResponse.<List<EmployeeResponse>>builder()
+                .code("hr-app-employee-05")
+                .success(true)
+                .message("Get all employees by user  successfully")
+                .data(employeeService.getAllByUser())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PutMapping("/{employeeId}")
+    @PreAuthorize("isAuthenticated()")
+    @CheckPermission(moduleCode = ModuleCode.HR, moduleRole = ModuleRole.MANAGER)
+    public ResponseEntity<ApiResponse<EmployeeResponse>> updateEmployee(
+            @PathVariable String employeeId, @RequestBody @Valid HRAppEmployeeUpdateRequest request) {
+        ApiResponse<EmployeeResponse> apiResponse = ApiResponse.<EmployeeResponse>builder()
+                .code("hr-app-employee-06")
+                .success(true)
+                .message("Update employee successfully")
+                .data(employeeService.updateEmployee(employeeId, request))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<EmployeeResponse>> getMyEmployeeInfo() {
+        ApiResponse<EmployeeResponse> apiResponse = ApiResponse.<EmployeeResponse>builder()
+                .code("hr-app-employee-07")
+                .success(true)
+                .message("Get my employee info successfully")
+                .data(employeeService.getMyEmployeeInfo())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

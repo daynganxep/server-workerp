@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class PermissionInterceptor implements HandlerInterceptor {
@@ -22,32 +24,22 @@ public class PermissionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            CheckPermission checkPermission = handlerMethod.getMethodAnnotation(CheckPermission.class);
+        if (!(handler instanceof HandlerMethod)) return true;
 
-            if (checkPermission != null) {
-                String companyId = request.getHeader("xxx-company-id");
-                String userId = SecurityUtil.getUserId();
-                ModuleCode moduleCode = checkPermission.moduleCode();
-                ModuleRole requiredRole = checkPermission.moduleRole();
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        CheckPermission checkPermission = handlerMethod.getMethodAnnotation(CheckPermission.class);
+        if (checkPermission == null) return true;
 
-                String key = AppConstant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode.toString(), userId);
-                String userRoleStr = (String) redisService.getRedisTemplate().opsForValue().get(key);
+        String companyId = request.getHeader("Xxx-Company-Id");
+        String userId = SecurityUtil.getUserId();
+        ModuleCode moduleCode = checkPermission.moduleCode();
+        ModuleRole requiredRole = checkPermission.moduleRole();
 
-                if (userRoleStr == null) {
-                    throw new AppException(HttpStatus.FORBIDDEN, "Permission denied: Role not found", "permission-01-01");
-                }
+        String key = AppConstant.COMPANY_MODULE_ROLE_KEY(companyId, moduleCode.toString(), userId);
+        List<ModuleRole> moduleRoles = redisService.getList(key, ModuleRole.class);
 
-                if (requiredRole == null || requiredRole.equals(ModuleRole.USER)) {
-                    return true;
-                }
-
-                ModuleRole userRole = ModuleRole.valueOf(userRoleStr);
-                if (!userRole.equals(requiredRole)) {
-                    throw new AppException(HttpStatus.FORBIDDEN, "Permission denied: Role mismatch", "permission-01-02");
-                }
-            }
+        if (moduleRoles == null || (requiredRole != null && !moduleRoles.contains(requiredRole))) {
+            throw new AppException(HttpStatus.FORBIDDEN, "Permission denied", "permission-01-01");
         }
         return true;
     }

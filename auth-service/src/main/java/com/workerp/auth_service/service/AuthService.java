@@ -69,7 +69,7 @@ public class AuthService {
 
     public String verifyRegister(String code) {
         String key = redisRegisterKey(code);
-        RegisterData registerData = (RegisterData) redisService.getValue(key);
+        RegisterData registerData = redisService.getValue(key,RegisterData.class);
 
         if (registerData == null) throw new AppException(HttpStatus.BAD_REQUEST, "Invalid code", "auth-f-02-01");
 
@@ -134,7 +134,8 @@ public class AuthService {
         }
 
         String accountOAuthId;
-        String providerName = oAuth2User.getAttribute("provider"); // Có thể null với GitHub
+        String providerName = oAuth2User.getAttribute("provider");
+        if(providerName == null) providerName = "";
         String email;
         String avatar;
         String name;
@@ -202,7 +203,7 @@ public class AuthService {
 
     public AuthForgotPasswordVerifyResponse verifyForgotPassword(AuthForgotPasswordVerifyRequest request) {
         String key = redisForgotPasswordKey(request.getCode());
-        String email = (String) redisService.getValue(key);
+        String email = redisService.getValue(key,String.class);
         if (email == null) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Invalid code", "auth-f-09-01");
         }

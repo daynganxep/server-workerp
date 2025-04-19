@@ -23,6 +23,7 @@
         <module>auth-service</module>
         <module>company-app-service</module>
         <module>hr-app-service</module>
+        <module>project-app-service</module>
         <module>api-getway</module>
     </modules>
 

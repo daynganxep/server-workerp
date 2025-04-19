@@ -1,8 +1,6 @@
 package com.workerp.common_lib.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -17,16 +15,9 @@ public class BaseRedisConfig {
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-        GenericJackson2JsonRedisSerializer jsonSerializer = new GenericJackson2JsonRedisSerializer(
-                JsonMapper.builder()
-                        .activateDefaultTyping(
-                                BasicPolymorphicTypeValidator.builder()
-                                        .allowIfBaseType(Object.class)
-                                        .build(),
-                                ObjectMapper.DefaultTyping.NON_FINAL
-                        )
-                        .build()
-        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        GenericJackson2JsonRedisSerializer jsonSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
 
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(jsonSerializer);

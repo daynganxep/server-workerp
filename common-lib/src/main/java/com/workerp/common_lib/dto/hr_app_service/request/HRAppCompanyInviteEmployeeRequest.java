@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HRAppInviteToCompanyRequest implements Serializable {
+public class HRAppCompanyInviteEmployeeRequest implements Serializable {
     private static final long serialVersionUID = 1L;
     @NotBlank
     private String userId;

@@ -5,7 +5,6 @@ import com.workerp.company_app_service.model.CompanyModuleRole;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CompanyModuleRoleRepository extends MongoRepository<CompanyModuleRole, String> {
     Boolean existsByUserIdAndCompanyIdAndModuleCode(String userId, String companyId, ModuleCode moduleCode);
@@ -14,9 +13,7 @@ public interface CompanyModuleRoleRepository extends MongoRepository<CompanyModu
 
     void deleteByCompanyIdAndModuleCodeAndUserId(String companyId, ModuleCode moduleCode, String userId);
 
-    Optional<CompanyModuleRole> findByCompanyIdAndModuleCodeAndUserId(String companyId, ModuleCode moduleCode, String userId);
-
     List<CompanyModuleRole> findAllByCompanyIdAndModuleCodeIn(String companyId, List<ModuleCode> moduleCodes);
 
-    List<CompanyModuleRole> findAllByCompanyIdAndModuleCodeInAndUserId(String companyId, List<ModuleCode> moduleCodes, String userId);
+    List<CompanyModuleRole> findAllByCompanyIdAndModuleCodeInAndUserIdAndActiveIsTrue(String companyId, List<ModuleCode> moduleCodes, String userId);
 }

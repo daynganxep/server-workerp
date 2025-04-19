@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.redis.core.index.Indexed;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -32,8 +33,8 @@ public class CompanyModuleRole {
     @Field(name = "cmr_active", targetType = FieldType.BOOLEAN)
     private Boolean active;
 
-    @Field(name = "cmr_role", targetType = FieldType.STRING)
-    private ModuleRole moduleRole;
+    @Field(name = "cmr_roles", targetType = FieldType.STRING)
+    private List<ModuleRole>  moduleRoles;
 
     @Field(name = "cpn_company_id", targetType = FieldType.OBJECT_ID)
     private String companyId;

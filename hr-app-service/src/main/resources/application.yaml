@@ -12,7 +12,7 @@ spring:
     mongodb:
       host: ${MONGODB_HOST:localhost}
       port: ${MONGODB_PORT:27017}
-      database: ${MONGODB_DATABASE:workerp_users}
+      database: ${MONGODB_DATABASE:workerp_hr_app}
       username: ${MONGODB_USERNAME:root}
       password: ${MONGODB_PASSWORD:rootpassword}
       authentication-database: admin

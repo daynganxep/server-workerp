@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:8086}
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import: "optional:file:.env[.properties]"
+  application:
+    name: project-app-service
+  data:
+    mongodb:
+      host: ${MONGODB_HOST:localhost}
+      port: ${MONGODB_PORT:27017}
+      database: ${MONGODB_DATABASE:workerp_project_app}
+      username: ${MONGODB_USERNAME:root}
+      password: ${MONGODB_PASSWORD:rootpassword}
+      authentication-database: admin
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+app:
+  jwt:
+    access:
+      secret: ${JWT_ACCESS_SECRET}
+  client:
+    path: ${CLIENT_PATH:'http://localhost:3000/'}
+
+feign:
+  api-gateway:
+    url: http://localhost:8080
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
