@@ -27,7 +27,7 @@ public class DepartmentController {
     @CheckPermission(moduleCode = ModuleCode.HR, moduleRole = ModuleRole.MANAGER)
     public ResponseEntity<ApiResponse<DepartmentResponse>> createDepartment(@RequestBody @Valid DepartmentRequest request) {
         ApiResponse<DepartmentResponse> apiResponse = ApiResponse.<DepartmentResponse>builder()
-                .code("hr-app-dept-01")
+                .code("hr_app-dpm-s-01")
                 .success(true)
                 .message("Create department successfully")
                 .data(departmentService.createDepartment(request))
@@ -41,7 +41,7 @@ public class DepartmentController {
     public ResponseEntity<ApiResponse<DepartmentResponse>> updateDepartment(
             @PathVariable String departmentId, @RequestBody @Valid DepartmentRequest request) {
         ApiResponse<DepartmentResponse> apiResponse = ApiResponse.<DepartmentResponse>builder()
-                .code("hr-app-dept-02")
+                .code("hr_app-dpm-s-02")
                 .success(true)
                 .message("Update department successfully")
                 .data(departmentService.updateDepartment(departmentId, request))
@@ -55,7 +55,7 @@ public class DepartmentController {
     public ResponseEntity<ApiResponse<Void>> deleteDepartment(@PathVariable String departmentId) {
         departmentService.deleteDepartment(departmentId);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-                .code("hr-app-dept-03")
+                .code("hr_app-dpm-s-03")
                 .success(true)
                 .message("Delete department successfully")
                 .build();
@@ -68,7 +68,7 @@ public class DepartmentController {
     public ResponseEntity<ApiResponse<List<DepartmentResponse>>> getDepartmentsByCompanyId(
             @PathVariable String companyId) {
         ApiResponse<List<DepartmentResponse>> apiResponse = ApiResponse.<List<DepartmentResponse>>builder()
-                .code("hr-app-dept-04")
+                .code("hr_app-dpm-s-04")
                 .success(true)
                 .message("Get departments by company successfully")
                 .data(departmentService.getAllByCompanyId(companyId))

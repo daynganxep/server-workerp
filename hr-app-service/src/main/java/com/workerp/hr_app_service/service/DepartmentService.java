@@ -28,16 +28,16 @@ public class DepartmentService {
 
     public DepartmentResponse updateDepartment(String departmentId, DepartmentRequest request) {
         Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Department not found", "hr-app-d-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Department not found", "hr_app-dpm-f-02-01"));
         department.setName(request.getName());
         department.setDescription(request.getDescription());
         departmentRepository.save(department);
-        return  departmentMapper.toDepartmentResponse(department);
+        return departmentMapper.toDepartmentResponse(department);
     }
 
     public void deleteDepartment(String departmentId) {
         Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Department not found", "hr-app-d-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Department not found", "hr_app-dpm-f-03-01"));
         departmentRepository.delete(department);
     }
 

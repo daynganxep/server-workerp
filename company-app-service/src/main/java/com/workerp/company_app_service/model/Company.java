@@ -36,6 +36,9 @@ public class Company {
     @Field(name = "cpn_avatar", targetType = FieldType.STRING)
     private String avatar;
 
+    @Field(name = "cpn_cover_image", targetType = FieldType.STRING)
+    private String coverImage;
+
     @Field(name = "cpn_active", targetType = FieldType.BOOLEAN)
     private Boolean active;
 

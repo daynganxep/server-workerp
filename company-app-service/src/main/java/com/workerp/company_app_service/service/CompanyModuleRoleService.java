@@ -87,7 +87,7 @@ public class CompanyModuleRoleService {
     }
 
     public void companyAddUser(CompanyModuleRoleMessage message) {
-        Company company = companyRepository.findById(message.getCompanyId()).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company-cmr-02-01"));
+        Company company = companyRepository.findById(message.getCompanyId()).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company_app-cmr-f-02-01"));
         for (Module module : company.getModules()) {
             if (companyModuleRoleRepository.existsByUserIdAndCompanyIdAndModuleCode(message.getUserId(), company.getId(), module.getCode())) {
                 continue;
@@ -99,7 +99,7 @@ public class CompanyModuleRoleService {
     }
 
     public void companyRemoveUser(CompanyRemoveUserMessage message) {
-        Company company = companyRepository.findById(message.getCompanyId()).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company-cmr-03-01"));
+        Company company = companyRepository.findById(message.getCompanyId()).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company_app-cmr-f-03-01"));
         for (Module module : company.getModules()) {
             companyModuleRoleRepository.deleteByUserIdAndCompanyIdAndModuleCode(message.getUserId(), company.getId(), module.getCode());
         }
@@ -115,7 +115,10 @@ public class CompanyModuleRoleService {
             Optional<CompanyModuleRole> companyModuleRoleOptional = companyModuleRoleRepository.findById(companyModuleRoleModifyRequest.getId());
             if (companyModuleRoleOptional.isEmpty()) continue;
             CompanyModuleRole companyModuleRole = companyModuleRoleOptional.get();
-            if(companyModuleRole.getUserId().equals(ownerId)) continue;
+            if(companyModuleRole.getUserId().equals(ownerId) && companyModuleRole.getModuleCode().equals(ModuleCode.COMPANY)){
+                companyModuleRoleModifyRequest.setActive(true);
+                companyModuleRoleModifyRequest.setModuleRoles(List.of(ModuleRole.USER,ModuleRole.MANAGER));
+            }
             if (!companyId.equals(companyModuleRole.getCompanyId())) continue;
             companyModuleRole.setActive(companyModuleRoleModifyRequest.getActive());
             companyModuleRole.setModuleRoles(companyModuleRoleModifyRequest.getModuleRoles());

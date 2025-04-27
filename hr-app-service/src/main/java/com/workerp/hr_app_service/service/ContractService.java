@@ -31,7 +31,7 @@ public class ContractService {
 
     public ContractResponse updateContract(String contractId, ContractRequest request) {
         Contract contract = contractRepository.findById(contractId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Contract not found", "hr-app-f-contract-01-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Contract not found", "hr_app-ctr-f-02-01"));
         contractMapper.updateContractFromRequest(request,contract);
         contractRepository.save(contract);
         return contractMapper.toContractResponse(contract);
@@ -39,7 +39,7 @@ public class ContractService {
 
     public void deleteContract(String contractId) {
         Contract contract = contractRepository.findById(contractId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Contract not found", "hr-app-f-contract-02-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Contract not found", "hr_app-ctr-f-03-01"));
         contractRepository.delete(contract);
     }
 
@@ -51,7 +51,7 @@ public class ContractService {
         String userId = SecurityUtil.getUserId();
         String companyId = SecurityUtil.getCompanyId();
         Employee employee = employeeRepository.findByUserIdAndCompanyId(userId, companyId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Employee not found", "hr-app-f-contract-03-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Employee not found", "hr_app-ctr-f-05-01"));
         return contractMapper.toContractResponseList(contractRepository.findByEmployeeId(employee.getId()));
     }
 }

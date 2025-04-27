@@ -26,14 +26,14 @@ public class CompanyModuleRoleController {
     @PreAuthorize("isAuthenticated()")
     @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.MANAGER)
     public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> getAllByCompanyId() {
-        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company-app-cmr-01").success(true).message("Get all company module roles successfully").data(companyModuleRoleService.getAll()).build();
+        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company_app-cmr-s-01").success(true).message("Get all company module roles successfully").data(companyModuleRoleService.getAll()).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
     @GetMapping("/company/{companyId}/employee")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> getByEmployee(@PathVariable String companyId) {
-        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company-app-cmr-02").success(true).message("Get company module roles by employee successfully").data(companyModuleRoleService.getByEmployee(companyId)).build();
+        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company_app-cmr-s-02").success(true).message("Get company module roles by employee successfully").data(companyModuleRoleService.getByEmployee(companyId)).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
@@ -41,7 +41,7 @@ public class CompanyModuleRoleController {
     @PreAuthorize("isAuthenticated()")
     @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.MANAGER)
     public ResponseEntity<ApiResponse<List<CompanyModuleRoleResponse>>> modifyMany(@RequestBody @Valid List<CompanyModuleRoleModifyRequest> companyModuleRoleModifyRequests) {
-        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company-app-cmr-03").success(true).message("Modify many company module roles successfully").data(companyModuleRoleService.modifyMany(companyModuleRoleModifyRequests)).build();
+        ApiResponse<List<CompanyModuleRoleResponse>> apiResponse = ApiResponse.<List<CompanyModuleRoleResponse>>builder().code("company_app-cmr-s-03").success(true).message("Modify many company module roles successfully").data(companyModuleRoleService.modifyMany(companyModuleRoleModifyRequests)).build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

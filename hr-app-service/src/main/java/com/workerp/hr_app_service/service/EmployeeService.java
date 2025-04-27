@@ -56,7 +56,7 @@ public class EmployeeService {
         request.setCompanyId(companyId);
 
         if (employeeRepository.existsByCompanyIdAndUserId(companyId, userId)) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Employee has already belonged to the company", "hr-app-employee-f-01-01");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Employee has already belonged to the company", "hr_app-emp-f-01-01");
         }
 
         CompanyResponse company = companyServiceRestAPI.getCompanyById(companyId).getData();
@@ -79,12 +79,19 @@ public class EmployeeService {
         String key = String.format(REDIS_INVITE_TO_COMPANY_FORMAT, code);
         HRAppCompanyInviteEmployeeRequest hrAppCompanyInviteEmployeeRequest = redisService.getValue(key, HRAppCompanyInviteEmployeeRequest.class);
         if (hrAppCompanyInviteEmployeeRequest == null) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Invalid code", "hr-app-employee-f-02-01");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Invalid code", "hr_app-emp-f-02-01");
         }
         if (employeeRepository.existsByCompanyIdAndUserId(hrAppCompanyInviteEmployeeRequest.getCompanyId(), hrAppCompanyInviteEmployeeRequest.getUserId())) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Employee has already belonged to the company", "hr-app-employee-f-02-02");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Employee has already belonged to the company", "hr_app-emp-f-02-02");
         }
-        Employee employee = Employee.builder().companyId(hrAppCompanyInviteEmployeeRequest.getCompanyId()).userId(hrAppCompanyInviteEmployeeRequest.getUserId()).build();
+        UserGetByIdResponse user = userServiceRestAPI.getUserById(hrAppCompanyInviteEmployeeRequest.getUserId()).getData();
+        Employee employee = Employee.builder()
+                .companyId(hrAppCompanyInviteEmployeeRequest.getCompanyId())
+                .userId(user.getId())
+                .name(user.getFullName())
+                .avatar(user.getAvatar())
+                .email(user.getEmail())
+                .build();
         employeeRepository.save(employee);
         companyModuleRoleProducer.sendCompanyModuleRoleMessage(CompanyModuleRoleMessage.builder()
                 .companyId(hrAppCompanyInviteEmployeeRequest.getCompanyId())
@@ -97,7 +104,7 @@ public class EmployeeService {
     public EmployeeResponse addOwnerToCompany(HRAppCompanyAddOwnerRequest request) {
         String ownerId = SecurityUtil.getUserId();
         if (!ownerId.equals(request.getUserId()))
-            throw new AppException(HttpStatus.FORBIDDEN, "You are not allowed to perform this action", "hr-app-employee-f-03-01");
+            throw new AppException(HttpStatus.FORBIDDEN, "You are not allowed to perform this action", "hr_app-emp-f-03-01");
         Employee employee = Employee.builder().userId(request.getUserId()).companyId(request.getCompanyId()).build();
         employeeRepository.save(employee);
         return employeeMapper.toEmployeeResponse(employeeRepository.save(employee));
@@ -116,7 +123,7 @@ public class EmployeeService {
 
     public EmployeeResponse updateEmployee(String employeeId, HRAppEmployeeUpdateRequest request) {
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Employee not found", "hr-app-e-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Employee not found", "hr_app-emp-f-06-01"));
         Optional<Department> departmentOptional = departmentRepository.findById(request.getDepartmentId());
         Optional<Position> positionOptional = positionRepository.findById(request.getPositionId());
 
@@ -132,7 +139,15 @@ public class EmployeeService {
         String userId = SecurityUtil.getUserId();
         String companyId = SecurityUtil.getCompanyId();
         Employee employee = employeeRepository.findByUserIdAndCompanyId(userId, companyId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Employee not found", "hr-app-e-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Employee not found", "hr_app-emp-f-07-01"));
+        return employeeMapper.toEmployeeResponse(employee);
+    }
+
+    public EmployeeResponse updateMyEmployeeInfo(String employeeId, HRAppEmployeeUpdateRequest request) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Employee not found", "hr_app-emp-f-08-01"));
+        employeeMapper.updateEmployeeFromRequest(request,employee);
+        employeeRepository.save(employee);
         return employeeMapper.toEmployeeResponse(employee);
     }
 }

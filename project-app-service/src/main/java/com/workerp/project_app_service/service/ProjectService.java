@@ -34,7 +34,7 @@ public class ProjectService {
 
     public ProjectResponse updateProject(String projectId, ProjectRequest request) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project-02-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project_app-prj-f-02-01"));
         project.setName(request.getName());
         project.setDescription(request.getDescription());
         project.setCompanyId(request.getCompanyId());
@@ -48,7 +48,7 @@ public class ProjectService {
 
     public void deleteProject(String projectId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project-03-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project_app-prj-f-03-01"));
         projectRepository.delete(project);
     }
 
@@ -59,7 +59,7 @@ public class ProjectService {
 
     public ProjectResponse addMember(String projectId, ProjectMemberRequest request) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project-05-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project_app-prj-f-05-01"));
         ProjectMember member = ProjectMember.builder()
                 .employeeId(request.getEmployeeId())
                 .role(request.getRole())
@@ -68,7 +68,7 @@ public class ProjectService {
             project.setMembers(new ArrayList<>());
         }
         if(project.getMembers().stream().anyMatch(m -> m.getEmployeeId().equals(member.getEmployeeId()))) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Member already exists", "project-05-f-02");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Member already exists", "project_app-prj-f-05-02");
         }
         project.getMembers().add(member);
         projectRepository.save(project);
@@ -77,7 +77,7 @@ public class ProjectService {
 
     public ProjectResponse removeMember(String projectId, String employeeId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project-06-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project_app-prj-f-06-01"));
         project.getMembers().removeIf(m -> m.getEmployeeId().equals(employeeId));
         projectRepository.save(project);
         return projectMapper.toProjectResponse(project);
@@ -91,13 +91,13 @@ public class ProjectService {
 
     public ProjectResponse getProjectById(String projectId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project-08-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project_app-prj-f-08-01"));
         return projectMapper.toProjectResponse(project);
     }
 
     public void updateMemberRole(String projectId, String employeeId, ProjectMemberRole role){
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project-09-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Project not found", "project_app-prj-f-09-01"));
         project.getMembers().forEach(projectMember -> {
             if(projectMember.getEmployeeId().equals(employeeId)) {
                 projectMember.setRole(role);

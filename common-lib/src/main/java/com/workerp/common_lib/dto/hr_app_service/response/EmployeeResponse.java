@@ -10,6 +10,9 @@ import java.util.Date;
 public class EmployeeResponse {
     private String id;
     private String name;
+    private String avatar;
+    private String email;
+    private String phone;
     private String companyId;
     private Date dob;
     private String userId;

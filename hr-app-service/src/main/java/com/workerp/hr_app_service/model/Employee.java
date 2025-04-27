@@ -26,11 +26,20 @@ public class Employee {
     @Field(name = "epl_name", targetType = FieldType.STRING)
     private String name;
 
+    @Field(name = "epl_avatar", targetType = FieldType.STRING)
+    private String avatar;
+
     @Field(name = "epl_company_id", targetType = FieldType.OBJECT_ID)
     private String companyId;
 
     @Field(name = "epl_dob", targetType = FieldType.DATE_TIME)
     private Date dob;
+
+    @Field(name = "epl_email", targetType = FieldType.STRING)
+    private String email;
+
+    @Field(name = "epl_phone", targetType = FieldType.STRING)
+    private String phone;
 
     @Field(name = "epl_user_id", targetType = FieldType.OBJECT_ID)
     private String userId;

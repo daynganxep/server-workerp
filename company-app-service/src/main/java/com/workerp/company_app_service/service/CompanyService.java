@@ -17,12 +17,14 @@ import com.workerp.company_app_service.repository.CompanyRepository;
 import com.workerp.company_app_service.repository.ModuleRepository;
 import com.workerp.company_app_service.restapi.EmployeeServiceRestApi;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
@@ -47,13 +49,13 @@ public class CompanyService {
     }
 
     public CompanyResponse getById(String companyId) {
-        Company company = companyRepository.findById(companyId).orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Company not found", "company-app-company-f-02-01"));
+        Company company = companyRepository.findById(companyId).orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Company not found", "company_app-company-f-02-01"));
         return companyMapper.toCompanyResponse(company);
     }
 
     @Transactional
     public CompanyResponse updateModules(String companyId, CompanyAppUpdateModules request) {
-        Company company = companyRepository.findById(companyId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company-app-company-f-03-01"));
+        Company company = companyRepository.findById(companyId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company_app-company-f-03-01"));
         List<ModuleCode> updateModuleCodes = request.getModuleCodes();
         if (!updateModuleCodes.contains(ModuleCode.COMPANY)) updateModuleCodes.add(ModuleCode.COMPANY);
         if (!updateModuleCodes.contains(ModuleCode.HR)) updateModuleCodes.add(ModuleCode.HR);
@@ -75,7 +77,7 @@ public class CompanyService {
 
     public CompanyResponse updateInfo(CompanyAppUpdateCompanyInforRequest request){
         String companyId = SecurityUtil.getCompanyId();
-        Company company = companyRepository.findById(companyId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company-app-company-f-05-01"));
+        Company company = companyRepository.findById(companyId).orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Company not found", "company_app-company-f-05-01"));
         companyMapper.updateCompanyFromRequest(company,request);
         companyRepository.save(company);
         return companyMapper.toCompanyResponse(company);

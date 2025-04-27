@@ -37,7 +37,7 @@ public class EmployeeController {
     public ResponseEntity<ApiResponse<Void>> inviteToCompany(@RequestBody @Valid HRAppCompanyInviteEmployeeRequest request) {
         employeeService.inviteToCompany(request);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-                .code("hr-app-employee-01")
+                .code("hr_app-emp-s-01")
                 .success(true)
                 .message("Invite to company successfully")
                 .build();
@@ -55,7 +55,7 @@ public class EmployeeController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<EmployeeResponse>> addOwnerToCompany(@RequestBody HRAppCompanyAddOwnerRequest request) {
         ApiResponse<EmployeeResponse> apiResponse = ApiResponse.<EmployeeResponse>builder()
-                .code("hr-app-employee-03")
+                .code("hr_app-emp-s-03")
                 .success(true)
                 .message("Add owner to company successfully")
                 .data(employeeService.addOwnerToCompany(request))
@@ -67,9 +67,9 @@ public class EmployeeController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<EmployeeResponse>>> getEmployeesByCompanyId(@PathVariable String companyId) {
         ApiResponse<List<EmployeeResponse>> apiResponse = ApiResponse.<List<EmployeeResponse>>builder()
-                .code("hr-app-employee-04")
+                .code("hr_app-emp-s-04")
                 .success(true)
-                .message("Get all employees by companyid  successfully")
+                .message("Get all employees by company id successfully")
                 .data(employeeService.getAllByCompanyId(companyId))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
@@ -79,9 +79,9 @@ public class EmployeeController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<EmployeeResponse>>> getAllByUser() {
         ApiResponse<List<EmployeeResponse>> apiResponse = ApiResponse.<List<EmployeeResponse>>builder()
-                .code("hr-app-employee-05")
+                .code("hr_app-emp-s-05")
                 .success(true)
-                .message("Get all employees by user  successfully")
+                .message("Get all employees by user successfully")
                 .data(employeeService.getAllByUser())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
@@ -93,7 +93,7 @@ public class EmployeeController {
     public ResponseEntity<ApiResponse<EmployeeResponse>> updateEmployee(
             @PathVariable String employeeId, @RequestBody @Valid HRAppEmployeeUpdateRequest request) {
         ApiResponse<EmployeeResponse> apiResponse = ApiResponse.<EmployeeResponse>builder()
-                .code("hr-app-employee-06")
+                .code("hr_app-emp-s-06")
                 .success(true)
                 .message("Update employee successfully")
                 .data(employeeService.updateEmployee(employeeId, request))
@@ -105,10 +105,24 @@ public class EmployeeController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<EmployeeResponse>> getMyEmployeeInfo() {
         ApiResponse<EmployeeResponse> apiResponse = ApiResponse.<EmployeeResponse>builder()
-                .code("hr-app-employee-07")
+                .code("hr_app-emp-s-07")
                 .success(true)
                 .message("Get my employee info successfully")
                 .data(employeeService.getMyEmployeeInfo())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @PutMapping("/{employeeId}/me")
+    @PreAuthorize("isAuthenticated()")
+    @CheckPermission(moduleCode = ModuleCode.HR, moduleRole = ModuleRole.USER)
+    public ResponseEntity<ApiResponse<EmployeeResponse>> updateMyEmployeeInfo(
+            @PathVariable String employeeId, @RequestBody @Valid HRAppEmployeeUpdateRequest request) {
+        ApiResponse<EmployeeResponse> apiResponse = ApiResponse.<EmployeeResponse>builder()
+                .code("hr_app-emp-s-08")
+                .success(true)
+                .message("Update my employee info successfully")
+                .data(employeeService.updateMyEmployeeInfo(employeeId, request))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

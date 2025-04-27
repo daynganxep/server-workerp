@@ -13,5 +13,6 @@ public class CompanyResponse {
     private String domain;
     private Boolean active;
     private String avatar;
+    private String coverImage;
     private List<ModuleResponse> modules;
 }

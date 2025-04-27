@@ -1,17 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome {{email}}</title>
+    <title>Chào Mừng {{email}}</title>
+    <!-- Material-UI CDN -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://unpkg.com/@mui/material@latest/dist/mui.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px;
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .logo {
+            max-width: 400px;
+            margin-bottom: 16px;
+        }
+        .header {
+            font-size: 20px;
+            font-weight: 500;
+            color: #121212;
+            margin-bottom: 16px;
+        }
+        .body-text {
+            font-size: 16px;
+            color: #424242;
+            margin: 8px 0;
+        }
+        .footer {
+            font-size: 14px;
+            color: #757575;
+            margin-top: 24px;
+        }
+    </style>
 </head>
 <body>
-<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-    <h2 style="text-align: center; color: #003399;">Welcome to WORK-ERP</h2>
-    <p>Dear {{name}},</p>
-    <p>Thank you for signing up with WORK-ERP!</p>
-    <p>We are excited to have you on board.</p>
-    <p>Thanks,<br>The WORK-ERP Team</p>
+<div class="container">
+    <img src="https://res.cloudinary.com/dt2tfpjrm/image/upload/v1745656279/workwerp_v1/images/tjkbkemhpuvrshhbgsmm.png" alt="Logo WORK.ERP" class="logo">
+    <div class="header">Chào Mừng Đến Với WORK.ERP</div>
+    <p class="body-text">Kính gửi {{name}},</p>
+    <p class="body-text">Cảm ơn bạn đã đăng ký với WORK.ERP!</p>
+    <p class="body-text">Chúng tôi rất vui được chào đón bạn tham gia.</p>
+    <p class="body-text">Trân trọng,<br>Đội ngũ WORK.ERP</p>
+    <div class="footer">© 2025 WORK.ERP. Mọi quyền được bảo lưu.</div>
 </div>
 </body>
 </html>

@@ -28,7 +28,7 @@ public class PositionService {
 
     public PositionResponse updatePosition(String positionId, PositionRequest request) {
         Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Position not found", "hr-app-p-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Position not found", "hr_app-pos-f-02-01"));
         position.setName(request.getName());
         position.setDescription(request.getDescription());
         positionRepository.save(position);
@@ -37,7 +37,7 @@ public class PositionService {
 
     public void deletePosition(String positionId) {
         Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Position not found", "hr-app-p-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Position not found", "hr_app-pos-f-03-01"));
         positionRepository.delete(position);
     }
 

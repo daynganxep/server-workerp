@@ -37,7 +37,7 @@ public class TaskService {
 
     public TaskResponse updateTask(String taskId, TaskRequest request) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-02-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-02-01"));
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
         task.setPriority(request.getPriority());
@@ -51,7 +51,7 @@ public class TaskService {
 
     public void deleteTask(String taskId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-03-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-03-01"));
         taskRepository.delete(task);
     }
 
@@ -82,14 +82,14 @@ public class TaskService {
 
     public TaskResponse updateTaskStatus(String taskId, TaskStatus status) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-06-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-06-01"));
         String currentEmployeeId = SecurityUtil.getEmployeeId();
         if(task.getAssignees() == null){
             task.setAssignees(List.of());
         }
         boolean isAssignee = task.getAssignees().contains(currentEmployeeId);
         if (!isAssignee) {
-            throw new AppException(HttpStatus.FORBIDDEN, "You can only update status of your tasks", "task-06-f-02");
+            throw new AppException(HttpStatus.FORBIDDEN, "You can only update status of your tasks", "project_app-task-f-06-02");
         }
         task.setStatus(status);
         taskRepository.save(task);
@@ -98,7 +98,7 @@ public class TaskService {
 
     public TaskResponse getTaskById(String taskId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-07-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-07-01"));
         TaskResponse taskResponse = taskMapper.toTaskResponse(task);
         if (task.getParentTaskId() == null) {
             Sort sort = Sort.by(Sort.Direction.ASC, "dueDate");
@@ -110,14 +110,14 @@ public class TaskService {
 
     public TaskResponse createSubtask(String taskId, TaskRequest request) {
         Task parentTask = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-08-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-08-01"));
         String currentEmployeeId = SecurityUtil.getEmployeeId();
         boolean isAssignee = parentTask.getAssignees().contains(currentEmployeeId);
         if (!isAssignee) {
-            throw new AppException(HttpStatus.FORBIDDEN, "You can only create subtasks for your tasks", "task-08-f-02");
+            throw new AppException(HttpStatus.FORBIDDEN, "You can only create subtasks for your tasks", "project_app-task-f-08-02");
         }
         if (parentTask.getParentTaskId() != null) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Subtasks can only be created for root tasks (2 levels max)", "task-08-f-03");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Subtasks can only be created for root tasks (2 levels max)", "project_app-task-f-08-03");
         }
         Task subtask = taskMapper.toTask(request);
         subtask.setParentTaskId(taskId);
@@ -160,9 +160,9 @@ public class TaskService {
 
     public TaskResponse addDependency(String taskId, String dependencyId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-09-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-09-01"));
         taskRepository.findById(dependencyId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Dependency task not found", "task-09-f-02"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Dependency task not found", "project_app-task-f-09-02"));
         if (!task.getDependencies().contains(dependencyId)) {
             task.getDependencies().add(dependencyId);
             taskRepository.save(task);
@@ -172,7 +172,7 @@ public class TaskService {
 
     public TaskResponse removeDependency(String taskId, String dependencyId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-10-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-10-01"));
         task.getDependencies().remove(dependencyId);
         taskRepository.save(task);
         return taskMapper.toTaskResponse(task);
@@ -180,7 +180,7 @@ public class TaskService {
 
     public CommentResponse addComment(String taskId, CommentRequest request) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-11-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-11-01"));
         Comment comment = Comment.builder()
                 .id(UUID.randomUUID().toString())
                 .content(request.getContent())
@@ -197,14 +197,14 @@ public class TaskService {
 
     public CommentResponse updateComment(String taskId, String commentId, CommentRequest request) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-12-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-12-01"));
         Comment comment = task.getComments().stream()
                 .filter(c -> c.getId().equals(commentId))
                 .findFirst()
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Comment not found", "task-12-f-02"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Comment not found", "project_app-task-f-12-02"));
         String currentEmployeeId = SecurityUtil.getEmployeeId();
         if (!comment.getCreatedBy().equals(currentEmployeeId)) {
-            throw new AppException(HttpStatus.FORBIDDEN, "You can only edit your comments", "task-12-f-03");
+            throw new AppException(HttpStatus.FORBIDDEN, "You can only edit your comments", "project_app-task-f-12-03");
         }
         comment.setContent(request.getContent());
         taskRepository.save(task);
@@ -213,14 +213,14 @@ public class TaskService {
 
     public void deleteComment(String taskId, String commentId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-13-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-13-01"));
         Comment comment = task.getComments().stream()
                 .filter(c -> c.getId().equals(commentId))
                 .findFirst()
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Comment not found", "task-13-f-02"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Comment not found", "project_app-task-f-13-02"));
         String currentEmployeeId = SecurityUtil.getEmployeeId();
         if (!comment.getCreatedBy().equals(currentEmployeeId)) {
-            throw new AppException(HttpStatus.FORBIDDEN, "You can only delete your comments", "task-13-f-03");
+            throw new AppException(HttpStatus.FORBIDDEN, "You can only delete your comments", "project_app-task-f-13-03");
         }
         task.getComments().removeIf(c -> c.getId().equals(commentId));
         taskRepository.save(task);
@@ -228,7 +228,7 @@ public class TaskService {
 
     public void assigneeUpdateTask(String taskId, AssigneeUpdateTaskRequest request) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "task-14-f-01"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Task not found", "project_app-task-f-14-01"));
         taskMapper.assignUpdateTask(request, task);
         taskRepository.save(task);
     }

@@ -1,5 +1,6 @@
 package com.workerp.hr_app_service.mapper;
 
+import com.workerp.common_lib.dto.hr_app_service.request.HRAppEmployeeUpdateRequest;
 import com.workerp.common_lib.dto.hr_app_service.response.DepartmentResponse;
 import com.workerp.common_lib.dto.hr_app_service.response.EmployeeResponse;
 import com.workerp.common_lib.dto.hr_app_service.response.PositionResponse;
@@ -17,4 +18,5 @@ public interface EmployeeMapper {
     PositionResponse toPositionResponse(Position position);
     EmployeeResponse toEmployeeResponse(Employee employee);
     List<EmployeeResponse> toEmployeeResponses(List<Employee> employees);
+    void updateEmployeeFromRequest(HRAppEmployeeUpdateRequest request,@MappingTarget Employee employee);
 }

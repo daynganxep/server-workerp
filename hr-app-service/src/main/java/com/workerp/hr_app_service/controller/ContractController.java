@@ -27,7 +27,7 @@ public class ContractController {
     @CheckPermission(moduleCode = ModuleCode.HR, moduleRole = ModuleRole.MANAGER)
     public ResponseEntity<ApiResponse<ContractResponse>> createContract(@RequestBody @Valid ContractRequest request) {
         ApiResponse<ContractResponse> apiResponse = ApiResponse.<ContractResponse>builder()
-                .code("hr-app-ctr-01")
+                .code("hr_app-ctr-s-01")
                 .success(true)
                 .message("Create contract successfully")
                 .data(contractService.createContract(request))
@@ -41,7 +41,7 @@ public class ContractController {
     public ResponseEntity<ApiResponse<ContractResponse>> updateContract(
             @PathVariable String contractId, @RequestBody @Valid ContractRequest request) {
         ApiResponse<ContractResponse> apiResponse = ApiResponse.<ContractResponse>builder()
-                .code("hr-app-ctr-02")
+                .code("hr_app-ctr-s-02")
                 .success(true)
                 .message("Update contract successfully")
                 .data(contractService.updateContract(contractId, request))
@@ -55,7 +55,7 @@ public class ContractController {
     public ResponseEntity<ApiResponse<Void>> deleteContract(@PathVariable String contractId) {
         contractService.deleteContract(contractId);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-                .code("hr-app-ctr-03")
+                .code("hr_app-ctr-s-03")
                 .success(true)
                 .message("Delete contract successfully")
                 .build();
@@ -67,7 +67,7 @@ public class ContractController {
     public ResponseEntity<ApiResponse<List<ContractResponse>>> getContractsByEmployeeId(
             @PathVariable String employeeId) {
         ApiResponse<List<ContractResponse>> apiResponse = ApiResponse.<List<ContractResponse>>builder()
-                .code("hr-app-ctr-04")
+                .code("hr_app-ctr-s-04")
                 .success(true)
                 .message("Get contracts by employee successfully")
                 .data(contractService.getAllByEmployeeId(employeeId))
@@ -80,7 +80,7 @@ public class ContractController {
     @CheckPermission(moduleCode = ModuleCode.HR, moduleRole = ModuleRole.USER)
     public ResponseEntity<ApiResponse<List<ContractResponse>>> getMyContracts() {
         ApiResponse<List<ContractResponse>> apiResponse = ApiResponse.<List<ContractResponse>>builder()
-                .code("hr-app-ctr-05")
+                .code("hr_app-ctr-s-05")
                 .success(true)
                 .message("Get my contract successfully")
                 .data(contractService.getMyContracts())

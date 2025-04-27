@@ -31,6 +31,7 @@ spring:
       password: ${REDIS_PASSWORD}
 # App custom variables
 app:
+  domain: ${APP_DOMAIN:'http://localhost:8080'}
   cloudinary:
     cloud-name: ${CLOUDINARY_NAME}
     api-key: ${CLOUDINARY_API_KEY}

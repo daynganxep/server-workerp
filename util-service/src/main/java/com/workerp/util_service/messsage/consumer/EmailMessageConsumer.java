@@ -23,6 +23,7 @@ public class EmailMessageConsumer {
             case WELCOME -> emailService.sendWelcomeEmail(emailMessage);
             case FORGOT_PASSWORD -> emailService.sendVerificationForgotPasswordEmail(emailMessage);
             case INVITE_TO_COMPANY -> emailService.sendInviteToCompanyEmail(emailMessage);
+            case ADD_TO_PROJECT -> emailService.sendAddedToProjectEmail(emailMessage);
         }
     }
 }

@@ -1,11 +1,11 @@
-package com.workerp.common_lib.dto.authservice.response;
+package com.workerp.common_lib.dto.auth_service.response;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class AuthForgotPasswordVerifyResponse {
+public class AuthLoginResponse {
     String refreshToken;
     String accessToken;
 }

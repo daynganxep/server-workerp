@@ -29,7 +29,7 @@ public class ModuleService {
     public CompanyAppCreateModuleResponse createModule(CompanyAppCreateModuleRequest request) {
         ModuleCode moduleCode = request.getCode();
         if (moduleRepository.existsByCode(moduleCode)) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Module with code " + moduleCode + " already exists", "company-app-module-f-01-01");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Module with code " + moduleCode + " already exists", "company_app-module-f-01-01");
         }
         Module module = moduleMapper.toEntity(request);
         module.setActive(true);

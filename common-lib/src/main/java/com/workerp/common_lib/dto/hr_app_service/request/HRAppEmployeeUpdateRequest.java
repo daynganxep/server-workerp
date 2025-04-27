@@ -11,6 +11,9 @@ public class HRAppEmployeeUpdateRequest {
     @NotBlank
     private String name;
     private Date dob;
+    private String avatar;
+    private String email;
+    private String phone;
     private String departmentId;
     private String positionId;
 }

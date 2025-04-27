@@ -1,10 +1,10 @@
 package com.workerp.auth_service.service;
 
-import com.workerp.common_lib.dto.authservice.request.*;
-import com.workerp.common_lib.dto.authservice.response.AuthForgotPasswordCheckCodeResponse;
-import com.workerp.common_lib.dto.authservice.response.AuthForgotPasswordVerifyResponse;
-import com.workerp.common_lib.dto.authservice.response.AuthLoginResponse;
-import com.workerp.common_lib.dto.authservice.response.AuthRefreshTokenResponse;
+import com.workerp.common_lib.dto.auth_service.request.*;
+import com.workerp.common_lib.dto.auth_service.response.AuthForgotPasswordCheckCodeResponse;
+import com.workerp.common_lib.dto.auth_service.response.AuthForgotPasswordVerifyResponse;
+import com.workerp.common_lib.dto.auth_service.response.AuthLoginResponse;
+import com.workerp.common_lib.dto.auth_service.response.AuthRefreshTokenResponse;
 import com.workerp.auth_service.mapper.AuthMapper;
 import com.workerp.auth_service.message.producer.EmailMessageProducer;
 import com.workerp.auth_service.restapi.UserServiceRestAPI;

@@ -107,7 +107,7 @@ public class UserController {
     @PermitAll
     public ResponseEntity<ApiResponse<UserGetByIdResponse>> getUserById(@PathVariable String userId) {
         ApiResponse<UserGetByIdResponse> apiResponse = ApiResponse.<UserGetByIdResponse>builder()
-                .code("user-s-09")
+                .code("user-s-08")
                 .success(true)
                 .message("Get user by id successfully")
                 .data(userService.getById(userId))

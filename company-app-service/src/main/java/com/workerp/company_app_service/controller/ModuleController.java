@@ -24,7 +24,7 @@ public class ModuleController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<CompanyAppCreateModuleResponse>> createModule(@RequestBody @Valid CompanyAppCreateModuleRequest request) {
         ApiResponse<CompanyAppCreateModuleResponse> apiResponse = ApiResponse.<CompanyAppCreateModuleResponse>builder()
-                .code("company-app-module-01")
+                .code("company_app-module-s-01")
                 .success(true)
                 .message("Module created successfully")
                 .data(moduleService.createModule(request))
@@ -36,7 +36,7 @@ public class ModuleController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<ModuleResponse>>> getAllModules() {
         ApiResponse<List<ModuleResponse>> apiResponse = ApiResponse.<List<ModuleResponse>>builder()
-                .code("company-app-module-02")
+                .code("company_app-module-s-02")
                 .success(true)
                 .message("Get all modules successfully")
                 .data(moduleService.getAllModules())

@@ -27,7 +27,7 @@ public class PositionController {
     @CheckPermission(moduleCode = ModuleCode.HR, moduleRole = ModuleRole.MANAGER)
     public ResponseEntity<ApiResponse<PositionResponse>> createPosition(@RequestBody @Valid PositionRequest request) {
         ApiResponse<PositionResponse> apiResponse = ApiResponse.<PositionResponse>builder()
-                .code("hr-app-pos-01")
+                .code("hr_app-pos-s-01")
                 .success(true)
                 .message("Create position successfully")
                 .data(positionService.createPosition(request))
@@ -41,7 +41,7 @@ public class PositionController {
     public ResponseEntity<ApiResponse<PositionResponse>> updatePosition(
             @PathVariable String positionId, @RequestBody @Valid PositionRequest request) {
         ApiResponse<PositionResponse> apiResponse = ApiResponse.<PositionResponse>builder()
-                .code("hr-app-pos-02")
+                .code("hr_app-pos-s-02")
                 .success(true)
                 .message("Update position successfully")
                 .data(positionService.updatePosition(positionId, request))
@@ -55,7 +55,7 @@ public class PositionController {
     public ResponseEntity<ApiResponse<Void>> deletePosition(@PathVariable String positionId) {
         positionService.deletePosition(positionId);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-                .code("hr-app-pos-03")
+                .code("hr_app-pos-s-03")
                 .success(true)
                 .message("Delete position successfully")
                 .build();
@@ -68,7 +68,7 @@ public class PositionController {
     public ResponseEntity<ApiResponse<List<PositionResponse>>> getPositionsByCompanyId(
             @PathVariable String companyId) {
         ApiResponse<List<PositionResponse>> apiResponse = ApiResponse.<List<PositionResponse>>builder()
-                .code("hr-app-pos-04")
+                .code("hr_app-pos-s-04")
                 .success(true)
                 .message("Get positions by company successfully")
                 .data(positionService.getAllByCompanyId(companyId))

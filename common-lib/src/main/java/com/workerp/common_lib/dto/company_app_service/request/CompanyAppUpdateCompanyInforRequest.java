@@ -9,5 +9,6 @@ public class CompanyAppUpdateCompanyInforRequest {
     private String name;
     private String domain;
     private String avatar;
+    private String coverImage;
     private Boolean active;
 }

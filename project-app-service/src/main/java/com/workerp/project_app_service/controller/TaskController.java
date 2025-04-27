@@ -36,7 +36,7 @@ public class TaskController {
             @PathVariable String projectId,
             @RequestBody @Valid TaskRequest request) {
         ApiResponse<TaskResponse> apiResponse = ApiResponse.<TaskResponse>builder()
-                .code("task-01")
+                .code("project_app-task-s-01")
                 .success(true)
                 .message("Create task successfully")
                 .data(taskService.createTask(projectId, request))
@@ -51,7 +51,7 @@ public class TaskController {
             @PathVariable String taskId,
             @RequestBody @Valid TaskRequest request) {
         ApiResponse<TaskResponse> apiResponse = ApiResponse.<TaskResponse>builder()
-                .code("task-02")
+                .code("project_app-task-s-02")
                 .success(true)
                 .message("Update task successfully")
                 .data(taskService.updateTask(taskId, request))
@@ -65,7 +65,7 @@ public class TaskController {
     public ResponseEntity<ApiResponse<Void>> deleteTask(@PathVariable String taskId) {
         taskService.deleteTask(taskId);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-                .code("task-03")
+                .code("project_app-task-s-03")
                 .success(true)
                 .message("Delete task successfully")
                 .build();
@@ -81,7 +81,7 @@ public class TaskController {
             @RequestParam(defaultValue = "dueDate") String sortBy,
             @RequestParam(defaultValue = "asc") String order) {
         ApiResponse<List<TaskResponse>> apiResponse = ApiResponse.<List<TaskResponse>>builder()
-                .code("task-04")
+                .code("project_app-task-s-04")
                 .success(true)
                 .message("Get tasks by project successfully")
                 .data(taskService.getTasksByProjectId(projectId, status, priority, sortBy, order))
@@ -96,7 +96,7 @@ public class TaskController {
             @RequestParam(defaultValue = "dueDate") String sortBy,
             @RequestParam(defaultValue = "asc") String order) {
         ApiResponse<List<TaskResponse>> apiResponse = ApiResponse.<List<TaskResponse>>builder()
-                .code("task-05")
+                .code("project_app-task-s-05")
                 .success(true)
                 .message("Get my tasks successfully")
                 .data(taskService.getMyTasks(projectId,sortBy, order))
@@ -110,10 +110,10 @@ public class TaskController {
             @PathVariable String taskId,
             @RequestBody @Valid TaskUpdateStatus request) {
         if (request == null) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Task status cannot be null", "task-06-f-03");
+            throw new AppException(HttpStatus.BAD_REQUEST, "Task status cannot be null", "project_app-task-f-06-03");
         }
         ApiResponse<TaskResponse> apiResponse = ApiResponse.<TaskResponse>builder()
-                .code("task-06")
+                .code("project_app-task-s-06")
                 .success(true)
                 .message("Update task status successfully")
                 .data(taskService.updateTaskStatus(taskId, request.getStatus()))
@@ -125,7 +125,7 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<TaskResponse>> getTaskById(@PathVariable String taskId) {
         ApiResponse<TaskResponse> apiResponse = ApiResponse.<TaskResponse>builder()
-                .code("task-07")
+                .code("project_app-task-s-07")
                 .success(true)
                 .message("Get task successfully")
                 .data(taskService.getTaskById(taskId))
@@ -139,7 +139,7 @@ public class TaskController {
             @PathVariable String taskId,
             @RequestBody @Valid TaskRequest request) {
         ApiResponse<TaskResponse> apiResponse = ApiResponse.<TaskResponse>builder()
-                .code("task-08")
+                .code("project_app-task-s-08")
                 .success(true)
                 .message("Create subtask successfully")
                 .data(taskService.createSubtask(taskId, request))
@@ -154,7 +154,7 @@ public class TaskController {
             @PathVariable String taskId,
             @PathVariable String dependencyId) {
         ApiResponse<TaskResponse> apiResponse = ApiResponse.<TaskResponse>builder()
-                .code("task-09")
+                .code("project_app-task-s-09")
                 .success(true)
                 .message("Add dependency successfully")
                 .data(taskService.addDependency(taskId, dependencyId))
@@ -169,7 +169,7 @@ public class TaskController {
             @PathVariable String taskId,
             @PathVariable String dependencyId) {
         ApiResponse<TaskResponse> apiResponse = ApiResponse.<TaskResponse>builder()
-                .code("task-10")
+                .code("project_app-task-s-10")
                 .success(true)
                 .message("Remove dependency successfully")
                 .data(taskService.removeDependency(taskId, dependencyId))
@@ -183,7 +183,7 @@ public class TaskController {
             @PathVariable String taskId,
             @RequestBody @Valid CommentRequest request) {
         ApiResponse<CommentResponse> apiResponse = ApiResponse.<CommentResponse>builder()
-                .code("task-11")
+                .code("project_app-task-s-11")
                 .success(true)
                 .message("Add comment successfully")
                 .data(taskService.addComment(taskId, request))
@@ -198,7 +198,7 @@ public class TaskController {
             @PathVariable String commentId,
             @RequestBody @Valid CommentRequest request) {
         ApiResponse<CommentResponse> apiResponse = ApiResponse.<CommentResponse>builder()
-                .code("task-12")
+                .code("project_app-task-s-12")
                 .success(true)
                 .message("Update comment successfully")
                 .data(taskService.updateComment(taskId, commentId, request))
@@ -213,7 +213,7 @@ public class TaskController {
             @PathVariable String commentId) {
         taskService.deleteComment(taskId, commentId);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-                .code("task-13")
+                .code("project_app-task-s-13")
                 .success(true)
                 .message("Delete comment successfully")
                 .build();
@@ -228,7 +228,7 @@ public class TaskController {
             @RequestBody AssigneeUpdateTaskRequest request) {
         taskService.assigneeUpdateTask(taskId, request);
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-                .code("task-14")
+                .code("project_app-task-s-14")
                 .success(true)
                 .message("Assignee Update Task successfully")
                 .build();

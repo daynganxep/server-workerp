@@ -5,5 +5,6 @@ public enum EmailType {
     WELCOME,
     FORGOT_PASSWORD,
     GENERIC,
-    INVITE_TO_COMPANY
+    INVITE_TO_COMPANY,
+    ADD_TO_PROJECT
 }

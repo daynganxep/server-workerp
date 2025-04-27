@@ -29,7 +29,7 @@ public class CompanyController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<CompanyResponse>> createCompany(@RequestBody @Valid CompanyAppCreateCompanyRequest request) {
         ApiResponse<CompanyResponse> apiResponse = ApiResponse.<CompanyResponse>builder()
-                .code("company-app-company-01")
+                .code("company_app-company-s-01")
                 .success(true)
                 .message("Company created successfully")
                 .data(companyService.createCompany(request))
@@ -41,7 +41,7 @@ public class CompanyController {
     @PermitAll
     public ResponseEntity<ApiResponse<CompanyResponse>> getCompanyById(@PathVariable String companyId) {
         ApiResponse<CompanyResponse> apiResponse = ApiResponse.<CompanyResponse>builder()
-                .code("company-app-company-02")
+                .code("company_app-company-s-02")
                 .success(true)
                 .message("Get company by id successfully")
                 .data(companyService.getById(companyId))
@@ -54,7 +54,7 @@ public class CompanyController {
     @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.MANAGER)
     public ResponseEntity<ApiResponse<CompanyResponse>> updateModules(@RequestBody @Valid CompanyAppUpdateModules request, @PathVariable String companyId) {
         ApiResponse<CompanyResponse> apiResponse = ApiResponse.<CompanyResponse>builder()
-                .code("company-app-company-03")
+                .code("company_app-company-s-03")
                 .success(true)
                 .message("Update modules successfully")
                 .data(companyService.updateModules(companyId, request))
@@ -66,7 +66,7 @@ public class CompanyController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<CompanyResponse>>> getAllMyCompanies() {
         ApiResponse<List<CompanyResponse>> apiResponse = ApiResponse.<List<CompanyResponse>>builder()
-                .code("company-app-company-04")
+                .code("company_app-company-s-04")
                 .success(true)
                 .message("Get all my companies")
                 .data(companyService.getAllMyCompanies())
@@ -79,7 +79,7 @@ public class CompanyController {
     @CheckPermission(moduleCode = ModuleCode.COMPANY, moduleRole = ModuleRole.MANAGER)
     public ResponseEntity<ApiResponse<CompanyResponse>> updateInfo(@RequestBody @Valid CompanyAppUpdateCompanyInforRequest request) {
         ApiResponse<CompanyResponse> apiResponse = ApiResponse.<CompanyResponse>builder()
-                .code("company-app-company-05")
+                .code("company_app-company-s-05")
                 .success(true)
                 .message("Updated company info successfully")
                 .data(companyService.updateInfo(request))
